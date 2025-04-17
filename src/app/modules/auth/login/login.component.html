@@ -1,0 +1,57 @@
+<div class="flex flex-col items-center p-6">
+  <div class="text-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Iniciar sesión</h1>
+    <p class="text-gray-600 mt-1">Accede a tu cuenta para continuar</p>
+  </div>
+
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="w-full max-w-md">
+    <div class="flex flex-col gap-4">
+      <!-- Email field -->
+      <div class="w-full">
+        <p-iftalabel styleClass="w-full block">
+          <p-iconfield styleClass="w-full">
+            <input
+            pInputText
+            id="email"
+            formControlName="email"
+            autocomplete="email"
+            aria-required="true"
+            class="w-full"
+            size="small"
+            />
+            <p-inputicon class="pi pi-user" aria-hidden="true" />
+          </p-iconfield>
+          <label for="email" class="mb-1 block">Correo electrónico</label>
+        </p-iftalabel>
+      </div>
+
+      <!-- Password field -->
+      <div class="w-full">
+        <p-iftalabel styleClass="w-full block">
+          <p-password
+          inputId="password"
+          formControlName="password"
+          [toggleMask]="true"
+          [feedback]="false"
+          autocomplete="current-password"
+          aria-required="true"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+          size="small"
+          />
+          <label for="password" class="mb-1 block">Contraseña</label>
+        </p-iftalabel>
+      </div>
+
+      <!-- Submit button -->
+      <div class="w-full mt-2">
+        <p-button
+          type="submit"
+          label="Ingresar"
+          icon="pi pi-sign-in"
+          styleClass="w-full"
+        />
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,21 @@
+<header class="bg-[#F9F9F9] shadow-lg">
+  <div class="container mx-auto py-2">
+    <div class="flex justify-between">
+      <div class="flex items-center">
+        <div class="md:hidden">
+          <p-button icon="pi pi-bars" [rounded]="true" [text]="true" (click)="toggleMobileSidebar()" />
+        </div>
+        <img src="assets/images/logo_system.png" width="120" alt="System 1.0">
+      </div>
+      <div class="flex items-center gap-2">
+        <span>Juan Perez</span>
+        <div class="card flex justify-center">
+          <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true" (click)="menu.toggle($event)" />
+          <p-tieredmenu #menu [model]="items" [popup]="true" />
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+

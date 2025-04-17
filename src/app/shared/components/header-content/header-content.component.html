@@ -1,0 +1,58 @@
+<div class="flex justify-between items-center mb-4">
+  <h4 class="text-lg font-semibold text-gray-700">{{ title }}</h4>
+  <div class="flex gap-x-2">
+    <p-button
+      icon="pi pi-filter"
+      label="Filtrar"
+      severity="secondary"
+      size="small"
+      (onClick)="onFilter()"
+    />
+    @if(typePage === 'Lista') {
+      <p-button
+        icon="pi pi-trash"
+        label="Papelera"
+        severity="secondary"
+        [badge]="trashes.toString()"
+        badgeSeverity="danger"
+        size="small"
+        routerLink="papelera"
+        [disabled]="trashes === 0"
+      />
+    }
+    <p-button
+      icon="pi pi-trash"
+      label="Eliminar selección"
+      severity="danger"
+      size="small"
+      [disabled]="!hasSelectedItem"
+      (onClick)="onDeleteAll()"
+    />
+    @if(typePage === 'Papelera') {
+      <p-button
+        icon="pi pi-undo"
+        label="Restaurar selección"
+        severity="info"
+        size="small"
+        [disabled]="!hasSelectedItem"
+        (onClick)="onRestoreAll()"
+      />
+      <p-button
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        label="Volver"
+        severity="contrast"
+        size="small"
+        (onClick)="goBack()"
+      />
+    }
+    @if(typePage === 'Lista') {
+      <p-button
+        icon="pi pi-plus"
+        label="Crear"
+        size="small"
+        (onClick)="onOpenCreate()"
+      />
+    }
+  </div>
+</div>

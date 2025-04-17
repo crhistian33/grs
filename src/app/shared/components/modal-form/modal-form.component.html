@@ -1,0 +1,14 @@
+<p-dialog
+  [header]="header"
+  [modal]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [maximizable]="true"
+  [closable]="true"
+  [closeOnEscape]="true">
+  <ng-content></ng-content>
+</p-dialog>
+<!-- [visible]="visible()"
+(visibleChange)="onHide($event)" -->

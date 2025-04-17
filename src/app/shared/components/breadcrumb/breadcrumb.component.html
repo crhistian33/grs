@@ -1,0 +1,19 @@
+<p-breadcrumb
+  class="max-w-full"
+  [home]="home"
+  [model]="(items$ | async) ?? undefined"
+  styleClass="bg-transparent text-sm py-1">
+  <ng-template #separator>
+    <i class="pi pi-chevron-right text-[10px] text-gray-400"></i>
+  </ng-template>
+  <ng-template #item let-item>
+      <ng-container *ngIf="item.url; else elseBlock">
+        <a [routerLink]="item.url" class="p-breadcrumb-item-link gap-0">
+            <span class="text-primary font-semibold">{{ item.label }}</span>
+        </a>
+      </ng-container>
+      <ng-template #elseBlock>
+        <span class="text-color">{{ item.label }}</span>
+      </ng-template>
+  </ng-template>
+</p-breadcrumb>

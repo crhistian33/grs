@@ -1,0 +1,16 @@
+@import "tailwindcss-primeui";
+@import "primeicons/primeicons.css";
+@import "tailwindcss";
+
+@layer components {
+  /* Cambio de estilos para cabecera de tablas */
+  /* .p-datatable-thead > tr > th {
+    @apply bg-gray-400 text-white;
+  } */
+  .p-tooltip-arrow {
+    display: none;
+  }
+  .p-tooltip .p-tooltip-text {
+    @apply text-sm p-2;
+  }
+}

@@ -1,0 +1,78 @@
+<!-- Mobile Hamburger Menu Icon -->
+<!-- <div class="md:hidden fixed top-4 left-4 z-40">
+  <button (click)="toggleMobileSidebar()" class="flex items-center justify-center p-2">
+    <i class="pi" [ngClass]="mobileSidebarVisible ? 'pi-times' : 'pi-bars'" class="text-gray-700 text-2xl"></i>
+  </button>
+</div> -->
+
+<!-- Mobile Sidebar Overlay -->
+<div
+  *ngIf="mobileSidebarVisible()"
+  class="md:hidden fixed inset-0 bg-black/50 z-40">
+</div>
+
+<!-- Mobile Sidebar -->
+<!-- <div
+  *ngIf="isMobile && mobileSidebarVisible"
+  [@slideInOut]
+  class="md:hidden fixed top-0 left-0 z-50 w-64 h-full bg-green-800 shadow-lg">
+
+  <div class="flex justify-between p-4">
+    <div class="rounded-full bg-white p-2 w-12 h-12 flex items-center justify-center">
+      <span class="text-green-800 font-bold">LOGO</span>
+    </div>
+    <button (click)="toggleMobileSidebar()" class="text-white">
+      <i class="pi pi-times text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col">
+    <div *ngFor="let item of menuItems" class="px-4 py-3">
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="font-bold"
+        class="flex items-center text-white hover:text-gray-200"
+        (click)="onMenuItemClick()">
+        <i [class]="'pi ' + item.icon + ' mr-3'"></i>
+        <span>{{item.label}}</span>
+      </a>
+    </div>
+  </div>
+</div> -->
+
+<!-- Desktop Sidebar -->
+<div
+  class="md:flex flex-col h-screen bg-primary-800 fixed top-0 left-0 transition-all duration-300 z-50"
+  [ngClass]="{'w-13': !expanded(), 'w-64': expanded()}"
+  (mouseenter)="onSidebarMouseEnter()"
+  (mouseleave)="onSidebarMouseLeave()"
+  *ngIf="mobileSidebarVisible() || !isMobile"
+  [@slideInOut]>
+
+  <button (click)="toggleMobileSidebar()" class="text-white" *ngIf="mobileSidebarVisible()">
+    <i class="pi pi-times text-xl"></i>
+  </button>
+
+  <div
+    class="w-10 mx-auto my-3">
+    <img src="assets/images/logo.png" class="w-full"  alt="Logo">
+  </div>
+
+  <!-- Desktop Menu Items -->
+  <div class="flex flex-col">
+    <div *ngFor="let item of menuItems">
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="bg-primary-900/70"
+        class="flex items-center text-white hover:bg-primary-900/70 text-center transition-colors px-4 py-3"
+        (click)="onSidebarMouseLeave()">
+        <i [class]="'pi ' + item.icon + ' text-xl'"></i>
+        <span
+          class="ml-3 whitespace-nowrap overflow-hidden transition-opacity duration-300"
+          [ngClass]="{'opacity-0': !expanded(), 'opacity-100': expanded()}">
+          {{item.label}}
+        </span>
+      </a>
+    </div>
+  </div>
+</div>

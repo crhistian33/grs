@@ -1,0 +1,25 @@
+<p-drawer [visible]="visible()" (onHide)="onHide()" styleClass="w-full sm:w-60 md:w-90">
+  <ng-template #header>
+    <h2>Filtros de búsqueda</h2>
+  </ng-template>
+
+  <form [formGroup]="filterForm" (submit)="onSubmit()">
+    <div class="flex flex-col gap-y-3">
+      <p-iftalabel>
+        <input pInputText id="search" formControlName="searchTerm" autocomplete="off" class="w-full" />
+        <label for="search">Buscar</label>
+      </p-iftalabel>
+      <p-iftalabel>
+        <p-select id="category" formControlName="categoryId" [options]="getOptionsSelect('category') | async" optionLabel="name" optionValue="id" [showClear]="true" class="w-full" />
+        <label for="category">Categorías</label>
+      </p-iftalabel>
+    </div>
+  </form>
+  <ng-template #footer>
+    <div class="flex items-center gap-2">
+      <button pButton label="Limpiar" icon="pi pi-eraser" class="w-full" severity="secondary" (click)="clearForm()"></button>
+      <button pButton label="Buscar" icon="pi pi-search" class="w-full" severity="primary" (click)="submitForm()"></button>
+    </div>
+  </ng-template>
+
+</p-drawer>

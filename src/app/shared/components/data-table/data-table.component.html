@@ -1,0 +1,78 @@
+<p-table
+  [value]="items"
+  [(selection)]="selectedItems"
+  selectionMode="multiple"
+  (onHeaderCheckboxToggle)="onToggleAll($event)"
+  [paginator]="true"
+  [rows]="10"
+  [showCurrentPageReport]="true"
+  currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+  [rowsPerPageOptions]="[5, 10, 25, 50]"
+  styleClass="p-datatable-sm"
+  class="p-datatable-sm"
+  [loading]="loading"
+  [showLoader]="false">
+  <ng-template pTemplate="loadingbody">
+    <tr *ngFor="let _ of [1,2,3,4,5]">
+      <td>
+        <p-skeleton></p-skeleton>
+      </td>
+      <td>
+        <p-skeleton></p-skeleton>
+      </td>
+      <td *ngFor="let item of headers">
+        <p-skeleton></p-skeleton>
+      </td>
+      <td>
+        <p-skeleton></p-skeleton>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th
+        class="w-1 px-3 py-2 text-left text-xs font-medium uppercase">
+        <div class="flex items-center gap-2">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </div>
+      </th>
+      <th pFrozenColumn class="p-table-thead w-2 text-center">#</th>
+      @for (header of headers; track $index) {
+        <th class="p-table-thead">{{ header.label }}</th>
+      }
+      <th class="p-table-thead w-40 text-center">Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+    <tr class="cursor-pointer" (click)="onToggleItem(item.id)">
+      <td class="px-3 py-2 whitespace-nowrap">
+        <p-tableCheckbox [value]="item"></p-tableCheckbox>
+      </td>
+      <td pFrozenColumn [style]="{textAlign: 'center'}">{{ rowIndex + 1 }}</td>
+      @for (header of headers; track $index) {
+        <td>{{ item[header.key] | formatData:header.type }}</td>
+      }
+      <td>
+        <div class="flex justify-center gap-2">
+          @if(typePage === 'Papelera') {
+            <p-button icon="pi pi-undo" severity="info" size="small" pTooltip="Restaurar"
+              tooltipPosition="bottom" (onClick)="onRestore(item); $event.stopPropagation()"></p-button>
+          }
+          @if(typePage === 'Lista') {
+            <p-button icon="pi pi-pencil" severity="warn" size="small" pTooltip="Editar"
+              tooltipPosition="bottom" (onClick)="onUpdate(item); $event.stopPropagation()"></p-button>
+          }
+          <p-button icon="pi pi-trash" severity="danger" size="small" pTooltip="Eliminar"
+            tooltipPosition="bottom" (onClick)="onDelete(item); $event.stopPropagation()"></p-button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td class="text-center" [colSpan]="headers.length + 3">
+        <p class="py-3">No hay elementos para mostrar en la lista</p>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

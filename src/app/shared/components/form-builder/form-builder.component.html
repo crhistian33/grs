@@ -1,0 +1,53 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit(true)">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    @for (item of formFields; track $index) {
+      @if (item.type === 'text' || item.type === 'tel') {
+        <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
+          <p-iftalabel>
+            <input [type]="item.type" pInputText [id]="item.key" [formControlName]="item.key" autocomplete="off" class="w-full" [ngClass]="{'ng-invalid ng-dirty': isInvalid(item.key)}" [maxlength]="item.maxLength ?? ''" />
+            <label [for]="item.key">{{ item.label }}</label>
+          </p-iftalabel>
+        </div>
+      }
+      @if(item.type === 'textarea') {
+        <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
+          <p-iftalabel>
+            <textarea pTextarea [id]="item.key" [formControlName]="item.key" rows="5" cols="30" class="w-full resize-none"></textarea>
+            <label [for]="item.key">{{ item.label }}</label>
+          </p-iftalabel>
+        </div>
+      }
+
+      @if(item.type === 'select') {
+        <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
+          <p-iftalabel>
+            <p-select [inputId]="item.key" [options]="getOptionsSelect(item.key) | async" [formControlName]="item.key" optionLabel="name" optionValue="id" [showClear]="true" [ngClass]="{'ng-invalid ng-dirty': isInvalid(item.key)}" class="w-full" />
+            <label [for]="item.key">{{ item.label }}</label>
+          </p-iftalabel>
+        </div>
+      }
+    }
+
+    <!-- Botones en horizontal -->
+    <div class="col-span-1 md:col-span-2 flex justify-end gap-2">
+      <p-button
+        label="Cancelar"
+        styleClass="p-button-secondary"
+        type="button"
+        (onClick)="onCancel()"
+      ></p-button>
+      @if(!entityID) {
+        <p-button
+          label="Guardar y crear"
+          styleClass="p-button-info"
+          type="button"
+          (onClick)="onSubmit(false)"
+        ></p-button>
+      }
+      <p-button
+        [label]="entityID ? 'Actualizar' : 'Guardar'"
+        type="submit"
+      ></p-button>
+    </div>
+  </div>
+</form>
