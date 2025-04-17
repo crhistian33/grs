@@ -4,7 +4,7 @@ import { checkToken } from '@interceptors/auth.interceptor';
 import { BaseModel } from '@shared/models/bases/base.model';
 import { ApiResCollection, ApiResSingle } from '@shared/models/bases/response.model';
 import { Observable, of } from 'rxjs';
-import { environment } from '@env/environment.prod';
+import { environment } from '@env/environment';
 
 @Injectable({
   providedIn: 'root'

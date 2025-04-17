@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { AuthState } from '@states/auth/auth.state';
-import { environment } from '@env/environment.prod';
+import { environment } from '@env/environment';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 @Injectable({
