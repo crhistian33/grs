@@ -22,6 +22,13 @@ import { BreadcrumbState } from '@shared/states/breadcrumb/breadcrumb.state';
 import { AuthState } from '@states/auth/auth.state';
 import { authInterceptor } from '@interceptors/auth.interceptor';
 import { CategoryState } from '@states/category/category.state';
+import { CenterState } from '@states/center/center.state';
+import { CompanyState } from '@states/company/company.state';
+import { CustomerState } from '@states/customer/customer.state';
+import { UnitState } from '@states/unit/unit.state';
+import { ShiftState } from '@states/shift/shift.state';
+import { TypeWorkerState } from '@states/typeworker/typeworker.state';
+import { WorkerState } from '@states/worker/worker.state';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -49,8 +56,13 @@ export const appConfig: ApplicationConfig = {
         AuthState,
         LoadingState,
         BreadcrumbState,
-        DemoState,
-        CategoryState,
+        CenterState,
+        CompanyState,
+        CustomerState,
+        UnitState,
+        ShiftState,
+        TypeWorkerState,
+        WorkerState,
       ],
       withNgxsStoragePlugin({
         keys: ['auth'],
