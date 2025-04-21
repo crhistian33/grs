@@ -3,7 +3,7 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Category } from '@models/masters/category.model';
 import { Store } from '@ngxs/store';
-import { FilterOptions } from '@shared/models/ui/filter.model';
+import { FilterOptions, FilterStateModel } from '@shared/models/ui/filter.model';
 import { ToggleStateService } from '@shared/services/ui/togglestate.service';
 import { CategoryState } from '@states/category/category.state';
 import { ButtonModule } from 'primeng/button';
@@ -24,7 +24,8 @@ export class FilterComponent {
   private toggleStateService = inject(ToggleStateService);
   private fb = inject(FormBuilder);
 
-  @Output() filters = new EventEmitter<FilterOptions>();
+  @Output() filters = new EventEmitter<FilterStateModel>();
+  @Input() fieldsFilter!: FilterOptions;
   visible = this.toggleStateService.filterData;
   filterForm: FormGroup;
 

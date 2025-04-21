@@ -1,5 +1,5 @@
 import { Unit, UnitResquest } from "@models/masters/unit.model";
-import { FilterOptions } from "@shared/models/ui/filter.model";
+import { FilterStateModel } from "@shared/models/ui/filter.model";
 
 export namespace UnitActions {
   export class GetAll {
@@ -75,6 +75,6 @@ export namespace UnitActions {
 
   export class Filter<T> {
     static readonly type = '[Unit] Filter';
-    constructor(public payload: Partial<FilterOptions>, public page: string, public columns: (keyof T)[]) {}
+    constructor(public payload: Partial<FilterStateModel>, public page: string, public columns: (keyof T)[]) {}
   }
 }

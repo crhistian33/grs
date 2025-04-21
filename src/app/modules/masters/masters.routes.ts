@@ -7,8 +7,8 @@ export const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: "demo",
-    loadChildren: () => import("./demo/demo.routes").then(m => m.routes),
-    data: { breadcrumb: 'Demos' },
+    path: "centros",
+    loadChildren: () => import("./center/center.routes").then(m => m.routes),
+    data: { breadcrumb: 'centros' },
   }
 ]

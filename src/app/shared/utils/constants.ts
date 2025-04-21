@@ -1,8 +1,15 @@
 export const TITLES = {
+  /* Demo */
   CREATE_DEMO: 'Nueva demo',
   UPDATE_DEMO: 'Actualizar demo',
   LIST_DEMO: 'Listado de demos',
   RECYCLE_DEMO: 'Papelera de demos',
+  /* Center */
+  CREATE_CENTER: 'Nuevo centro de costo',
+  UPDATE_CENTER: 'Actualizar centro de costo',
+  LIST_CENTER: 'Listado de centros de costo',
+  RECYCLE_CENTER: 'Papelera de centros de costo',
+  /* Confirm */
   CONFIRM_RESTORE: '¿Desea restaurar el registro?',
   CONFIRM_RESTORE_ALL: '¿Desea restaurar los registros?',
   CONFIRM_DELETE: '¿Desea eliminar el registro?',

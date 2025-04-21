@@ -1,4 +1,9 @@
 export interface FilterOptions {
-  searchTerm?: string | null;
+  search?: boolean;
+  categoryId?: boolean;
+}
+
+export interface FilterStateModel {
+  search?: string | null;
   categoryId?: number | null;
 }

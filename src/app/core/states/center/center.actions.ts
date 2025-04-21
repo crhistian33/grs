@@ -1,5 +1,5 @@
 import { Center, CenterResquest } from "@models/masters/center.model";
-import { FilterOptions } from "@shared/models/ui/filter.model";
+import { FilterStateModel } from "@shared/models/ui/filter.model";
 
 export namespace CenterActions {
   export class GetAll {
@@ -75,6 +75,6 @@ export namespace CenterActions {
 
   export class Filter<T> {
     static readonly type = '[Center] Filter';
-    constructor(public payload: Partial<FilterOptions>, public page: string, public columns: (keyof T)[]) {}
+    constructor(public payload: Partial<FilterStateModel>, public page: string, public columns: (keyof T)[]) {}
   }
 }

@@ -1,5 +1,5 @@
 import { Demo, DemoResquest } from "@models/masters/demo.model";
-import { FilterOptions } from "@shared/models/ui/filter.model";
+import { FilterStateModel } from "@shared/models/ui/filter.model";
 
 export namespace DemoActions {
   export class GetAll {
@@ -75,6 +75,6 @@ export namespace DemoActions {
 
   export class Filter<T> {
     static readonly type = '[Demo] Filter';
-    constructor(public payload: Partial<FilterOptions>, public page: string, public columns: (keyof T)[]) {}
+    constructor(public payload: Partial<FilterStateModel>, public page: string, public columns: (keyof T)[]) {}
   }
 }

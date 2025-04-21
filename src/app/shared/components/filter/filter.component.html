@@ -5,14 +5,18 @@
 
   <form [formGroup]="filterForm" (submit)="onSubmit()">
     <div class="flex flex-col gap-y-3">
-      <p-iftalabel>
-        <input pInputText id="search" formControlName="searchTerm" autocomplete="off" class="w-full" />
-        <label for="search">Buscar</label>
-      </p-iftalabel>
-      <p-iftalabel>
-        <p-select id="category" formControlName="categoryId" [options]="getOptionsSelect('category') | async" optionLabel="name" optionValue="id" [showClear]="true" class="w-full" />
-        <label for="category">Categorías</label>
-      </p-iftalabel>
+      @if(fieldsFilter.search) {
+        <p-iftalabel>
+          <input pInputText id="search" formControlName="searchTerm" autocomplete="off" class="w-full" />
+          <label for="search">Buscar</label>
+        </p-iftalabel>
+      }
+      @if(fieldsFilter.categoryId) {
+        <p-iftalabel>
+          <p-select id="category" formControlName="categoryId" [options]="getOptionsSelect('category') | async" optionLabel="name" optionValue="id" [showClear]="true" class="w-full" />
+          <label for="category">Categorías</label>
+        </p-iftalabel>
+      }
     </div>
   </form>
   <ng-template #footer>

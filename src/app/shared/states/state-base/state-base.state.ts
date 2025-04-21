@@ -7,7 +7,7 @@ import { tap } from 'rxjs';
 import { ApiResCollection, ApiResSingle } from '@shared/models/bases/response.model';
 import { SetLoading } from '@shared/states/loading/loading.actions';
 import { TYPES } from '@shared/utils/constants';
-import { FilterOptions } from '@shared/models/ui/filter.model';
+import { FilterOptions, FilterStateModel } from '@shared/models/ui/filter.model';
 
 @Injectable()
 export abstract class BaseState<T extends BaseModel, R>  {
@@ -288,21 +288,21 @@ export abstract class BaseState<T extends BaseModel, R>  {
       : ctx.patchState({ trashEntities: entities, filterTrashEntities: entities })
   }
 
-  protected filterBase(ctx: StateContext<BaseStateModel<T>>, payload: Partial<FilterOptions>, page: string, columns: (keyof T)[]) {
+  protected filterBase(ctx: StateContext<BaseStateModel<T>>, payload: Partial<FilterStateModel>, page: string, columns: (keyof T)[]) {
     ctx.patchState({ loading: true });
     const state = ctx.getState();
-    const { searchTerm, categoryId } = payload;
+    const { search, categoryId } = payload;
     const data = page === TYPES.LIST ? state.entities : state.trashEntities;
 
     const filtered = data.filter((item: any) => {
       const matchDrop = !categoryId || item.category.id === categoryId;
 
-      if(!searchTerm)
+      if(!search)
         return matchDrop;
 
       const matchSearch = !columns || columns.some((column) => {
         const value = item[column]?.toString().toLowerCase() || '';
-        return value.includes(searchTerm.toLowerCase());
+        return value.includes(search.toLowerCase());
       });
 
       return matchDrop && matchSearch;

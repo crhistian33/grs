@@ -4,20 +4,19 @@ import { HeaderContentComponent } from '@shared/components/header-content/header
 import { DataTableComponent } from '@shared/components/data-table/data-table.component';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ModalService } from '@shared/services/ui/modal.service';
-import { Demo } from '@models/masters/demo.model';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ITableHeader } from '@shared/models/bases/table-headers.model';
-import { DEMO_TABLE_HEADERS } from '@table-headers/demo-headers';
 import { ACTIONS, ICONS, MESSAGES, SEVERITIES, TITLES, TYPES } from '@shared/utils/constants';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { DemoState } from '@states/demo/demo.state';
-import { DemoActions } from '@states/demo/demo.actions';
 import { ToastService } from '@shared/services/ui/toast.service';
 import { FilterComponent } from '@shared/components/filter/filter.component';
-import { FilterStateModel } from '@shared/models/ui/filter.model';
-import { CategoryActions } from '@states/category/category.actions';
+import { FilterOptions, FilterStateModel } from '@shared/models/ui/filter.model';
+import { CENTER_TABLE_HEADERS } from '@table-headers/center-headers';
+import { Center } from '@models/masters/center.model';
+import { CenterState } from '@states/center/center.state';
+import { CenterActions } from '@states/center/center.actions';
 
 @Component({
   selector: 'app-list',
@@ -32,34 +31,36 @@ export class ListComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private destroy$ = new Subject<void>();
 
-  headers: ITableHeader<Demo>[] = DEMO_TABLE_HEADERS;
-  title: string = TITLES.LIST_DEMO;
+  headers: ITableHeader<Center>[] = CENTER_TABLE_HEADERS;
+  title: string = TITLES.LIST_CENTER;
   typePage: string = TYPES.LIST;
+  fieldsFilter: FilterOptions = {
+    search: true
+  }
 
-  demos$: Observable<Demo[]> = this.store.select(DemoState.getItems);
-  areAllSelected$: Observable<boolean> = this.store.select(DemoState.areAllSelected);
-  hasSelectedItems$: Observable<boolean> = this.store.select(DemoState.hasSelectedItems);
-  selectedItems$: Observable<Demo[]> = this.store.select(DemoState.getSelectedItems);
-  loading$: Observable<boolean> = this.store.select(DemoState.getLoading);
-  trashes$: Observable<number> = this.store.select(DemoState.getTrashes);
+  centers$: Observable<Center[]> = this.store.select(CenterState.getItems);
+  areAllSelected$: Observable<boolean> = this.store.select(CenterState.areAllSelected);
+  hasSelectedItems$: Observable<boolean> = this.store.select(CenterState.hasSelectedItems);
+  selectedItems$: Observable<Center[]> = this.store.select(CenterState.getSelectedItems);
+  loading$: Observable<boolean> = this.store.select(CenterState.getLoading);
+  trashes$: Observable<number> = this.store.select(CenterState.getTrashes);
 
   ngOnInit(): void {
-    this.store.dispatch(new DemoActions.GetAll);
-    this.store.dispatch(new CategoryActions.GetAll);
+    this.store.dispatch(new CenterActions.GetAll);
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.store.dispatch(new DemoActions.ClearAll);
+    this.store.dispatch(new CenterActions.ClearAll);
   }
 
   onCreate() {
-    this.modalService.onModalForm(FormComponent, TITLES.CREATE_DEMO);
+    this.modalService.onModalForm(FormComponent, TITLES.CREATE_CENTER);
   }
 
   onUpdate(item: any) {
-    this.modalService.onModalForm(FormComponent, TITLES.UPDATE_DEMO, item);
+    this.modalService.onModalForm(FormComponent, TITLES.UPDATE_CENTER, item);
   }
 
   onDelete(item: any) {
@@ -70,10 +71,10 @@ export class ListComponent implements OnInit, OnDestroy {
       SEVERITIES.DANGER,
       ICONS.EXC_DANGER,
       () => {
-        this.store.dispatch(new DemoActions.Delete(item.id))
+        this.store.dispatch(new CenterActions.Delete(item.id))
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
-          const result = response.demo.result;
+          const result = response.center.result;
           this.toastService.notification(result.title, result.message, 'success', 4000);
         });
       }
@@ -89,10 +90,10 @@ export class ListComponent implements OnInit, OnDestroy {
       ICONS.EXC_DANGER,
       () => {
         this.selectedItems$.pipe(take(1)).subscribe((data) => {
-          this.store.dispatch(new DemoActions.DeleteAll(data))
+          this.store.dispatch(new CenterActions.DeleteAll(data))
           .pipe(takeUntil(this.destroy$))
           .subscribe((response: any) => {
-            const result = response.demo.result;
+            const result = response.center.result;
             this.toastService.notification(result.title, result.message, 'success', 4000);
           });
         });
@@ -101,15 +102,15 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   onToggleItem(id: number) {
-    this.store.dispatch(new DemoActions.ToggleItemSelection(id, TYPES.LIST));
+    this.store.dispatch(new CenterActions.ToggleItemSelection(id, TYPES.LIST));
   }
 
   onToggleAll(checked: boolean) {
-    this.store.dispatch(new DemoActions.ToggleAllItems(checked, TYPES.LIST));
+    this.store.dispatch(new CenterActions.ToggleAllItems(checked, TYPES.LIST));
   }
 
   onFilterData(filter: FilterStateModel) {
     const columns: string[] = this.headers.filter(column => column.filtered).map(column => column.key);
-    this.store.dispatch(new DemoActions.Filter(filter, TYPES.LIST, columns));
+    this.store.dispatch(new CenterActions.Filter(filter, TYPES.LIST, columns));
   }
 }

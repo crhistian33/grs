@@ -86,7 +86,6 @@ export class AuthState {
       tap({
         next: () => {
           this.clear(ctx);
-          //localStorage.removeItem('auth');
           ctx.dispatch(new SetLoading(AuthActions.Logout.type, false));
           this.router.navigateByUrl('/auth/login');
         },
@@ -99,6 +98,6 @@ export class AuthState {
 
   @Action(AuthActions.ClearAll)
   clear(ctx: StateContext<AuthStateModel>) {
-    return ctx.patchState(INITIAL_VALUES);
+    return ctx.setState(INITIAL_VALUES);
   }
 }

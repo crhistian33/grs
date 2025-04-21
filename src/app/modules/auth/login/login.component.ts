@@ -9,7 +9,7 @@ import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 import { Store } from '@ngxs/store';
 import { AuthActions } from '@states/auth/auth.actions';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { filter, Subject, take, takeUntil, tap } from 'rxjs';
 import { AuthState } from '@states/auth/auth.state';
 import { Router } from '@angular/router';
 
@@ -34,9 +34,14 @@ export class LoginComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    const isAuthenticated = this.store.selectSnapshot(AuthState.getAuthenticated);
-    if(isAuthenticated)
+    this.store.select(AuthState.getAuthenticated)
+    .pipe(
+      take(1),
+      filter(isAuthenticated => isAuthenticated)
+    )
+    .subscribe(() => {
       this.router.navigateByUrl('/');
+    });
   }
 
   onSubmit() {
