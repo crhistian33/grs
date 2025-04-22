@@ -17,6 +17,7 @@ import { CENTER_TABLE_HEADERS } from '@table-headers/center-headers';
 import { Center } from '@models/masters/center.model';
 import { CenterState } from '@states/center/center.state';
 import { CenterActions } from '@states/center/center.actions';
+import { LayoutAction } from '@shared/states/layout/layout.actions';
 
 @Component({
   selector: 'app-list',
@@ -46,13 +47,19 @@ export class ListComponent implements OnInit, OnDestroy {
   trashes$: Observable<number> = this.store.select(CenterState.getTrashes);
 
   ngOnInit(): void {
-    this.store.dispatch(new CenterActions.GetAll);
+    this.store.dispatch([
+      new LayoutAction.SetTitle('Centros'),
+      new CenterActions.GetAll
+    ]);
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.store.dispatch(new CenterActions.ClearAll);
+    this.store.dispatch([
+      new LayoutAction.ClearTitle,
+      new CenterActions.ClearAll
+    ]);
   }
 
   onCreate() {

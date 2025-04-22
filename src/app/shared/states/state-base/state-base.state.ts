@@ -292,6 +292,7 @@ export abstract class BaseState<T extends BaseModel, R>  {
     ctx.patchState({ loading: true });
     const state = ctx.getState();
     const { search, categoryId } = payload;
+    console.log('Busqueda', search);
     const data = page === TYPES.LIST ? state.entities : state.trashEntities;
 
     const filtered = data.filter((item: any) => {

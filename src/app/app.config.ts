@@ -29,6 +29,7 @@ import { UnitState } from '@states/unit/unit.state';
 import { ShiftState } from '@states/shift/shift.state';
 import { TypeWorkerState } from '@states/typeworker/typeworker.state';
 import { WorkerState } from '@states/worker/worker.state';
+import { LayoutState } from '@shared/states/layout/layout.state';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -56,6 +57,7 @@ export const appConfig: ApplicationConfig = {
         AuthState,
         LoadingState,
         BreadcrumbState,
+        LayoutState,
         CenterState,
         CompanyState,
         CustomerState,

@@ -33,7 +33,7 @@ export class FilterComponent {
 
   constructor() {
     this.filterForm = this.fb.group({
-      searchTerm: [null],
+      search: [null],
       categoryId: [null]
     });
   }

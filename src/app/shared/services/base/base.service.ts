@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { inject, Inject, Injectable } from '@angular/core';
 import { checkToken } from '@interceptors/auth.interceptor';
 import { BaseModel } from '@shared/models/bases/base.model';
 import { ApiResCollection, ApiResSingle } from '@shared/models/bases/response.model';
 import { Observable, of } from 'rxjs';
 import { environment } from '@env/environment';
+import { Store } from '@ngxs/store';
+import { LayoutAction } from '@shared/states/layout/layout.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export abstract class BaseService<T extends BaseModel, R> {
   protected apiUrl = `${environment.API_URL}`;
   //protected mockMode = true;
 
-  constructor(protected http: HttpClient) {}
+  protected http = inject(HttpClient);
 
   getAll(): Observable<ApiResCollection<T>> {
     return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}`, { context: checkToken() });
