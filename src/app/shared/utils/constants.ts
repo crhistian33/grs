@@ -1,4 +1,17 @@
 export const TITLES = {
+  /* Principales */
+  CENTERS: 'Centros de costo',
+  TYPEWORKERS: 'Tipos de trabajador',
+  COMPANIES: 'Empresas',
+  CUSTOMERS: 'Clientes',
+  UNITS: 'Unidades',
+  SHIFTS: 'Turnos',
+  WORKERS: 'TRabajadores',
+  /* CRUD */
+  CREATE: 'Nuevo registro',
+  UPDATE: 'Actualizar registro',
+  LIST: 'Listado',
+  RECYCLE: 'Papelera de reciclaje',
   /* Demo */
   CREATE_DEMO: 'Nueva demo',
   UPDATE_DEMO: 'Actualizar demo',
@@ -9,11 +22,17 @@ export const TITLES = {
   UPDATE_CENTER: 'Actualizar centro de costo',
   LIST_CENTER: 'Listado de centros de costo',
   RECYCLE_CENTER: 'Papelera de centros de costo',
+  /* TypeWorker */
+  CREATE_TYPEWORKER: 'Nuevo registro',
+  UPDATE_TYPEWORKER: 'Actualizar registro',
+  LIST_TYPEWORKER: 'Listado',
+  RECYCLE_TYPEWORKER: 'Papelera de reciclaje',
   /* Confirm */
   CONFIRM_RESTORE: '¿Desea restaurar el registro?',
   CONFIRM_RESTORE_ALL: '¿Desea restaurar los registros?',
   CONFIRM_DELETE: '¿Desea eliminar el registro?',
   CONFIRM_DELETE_ALL: '¿Desea eliminar los registros?',
+
 }
 
 export const MESSAGES = {

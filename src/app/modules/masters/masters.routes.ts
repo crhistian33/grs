@@ -10,5 +10,10 @@ export const routes: Routes = [
     path: "centros",
     loadChildren: () => import("./center/center.routes").then(m => m.routes),
     data: { breadcrumb: 'centros' },
+  },
+  {
+    path: "tipos-trabajador",
+    loadChildren: () => import("./typeworker/typeworker.routes").then(m => m.routes),
+    data: { breadcrumb: 'tipos de trabajador' },
   }
 ]

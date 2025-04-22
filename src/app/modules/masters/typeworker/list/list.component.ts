@@ -13,10 +13,10 @@ import { Store } from '@ngxs/store';
 import { ToastService } from '@shared/services/ui/toast.service';
 import { FilterComponent } from '@shared/components/filter/filter.component';
 import { FilterOptions, FilterStateModel } from '@shared/models/ui/filter.model';
-import { CENTER_TABLE_HEADERS } from '@table-headers/center-headers';
-import { Center } from '@models/masters/center.model';
-import { CenterState } from '@states/center/center.state';
-import { CenterActions } from '@states/center/center.actions';
+import { TYPEWORKER_TABLE_HEADERS } from '@table-headers/typeworker-headers';
+import { TypeWorker } from '@models/masters/typeworker.model';
+import { TypeWorkerState } from '@states/typeworker/typeworker.state';
+import { TypeWorkerActions } from '@states/typeworker/typeworker.actions';
 import { LayoutAction } from '@shared/states/layout/layout.actions';
 
 @Component({
@@ -32,24 +32,24 @@ export class ListComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private destroy$ = new Subject<void>();
 
-  headers: ITableHeader<Center>[] = CENTER_TABLE_HEADERS;
+  headers: ITableHeader<TypeWorker>[] = TYPEWORKER_TABLE_HEADERS;
   title: string = TITLES.LIST;
   typePage: string = TYPES.LIST;
   fieldsFilter: FilterOptions = {
     search: true
   }
 
-  centers$: Observable<Center[]> = this.store.select(CenterState.getItems);
-  areAllSelected$: Observable<boolean> = this.store.select(CenterState.areAllSelected);
-  hasSelectedItems$: Observable<boolean> = this.store.select(CenterState.hasSelectedItems);
-  selectedItems$: Observable<Center[]> = this.store.select(CenterState.getSelectedItems);
-  loading$: Observable<boolean> = this.store.select(CenterState.getLoading);
-  trashes$: Observable<number> = this.store.select(CenterState.getTrashes);
+  typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getItems);
+  areAllSelected$: Observable<boolean> = this.store.select(TypeWorkerState.areAllSelected);
+  hasSelectedItems$: Observable<boolean> = this.store.select(TypeWorkerState.hasSelectedItems);
+  selectedItems$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getSelectedItems);
+  loading$: Observable<boolean> = this.store.select(TypeWorkerState.getLoading);
+  trashes$: Observable<number> = this.store.select(TypeWorkerState.getTrashes);
 
   ngOnInit(): void {
     this.store.dispatch([
-      new LayoutAction.SetTitle(TITLES.CENTERS),
-      new CenterActions.GetAll
+      new LayoutAction.SetTitle(TITLES.TYPEWORKERS),
+      new TypeWorkerActions.GetAll
     ]);
   }
 
@@ -58,7 +58,7 @@ export class ListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
     this.store.dispatch([
       new LayoutAction.ClearTitle,
-      new CenterActions.ClearAll
+      new TypeWorkerActions.ClearAll
     ]);
   }
 
@@ -78,10 +78,10 @@ export class ListComponent implements OnInit, OnDestroy {
       SEVERITIES.DANGER,
       ICONS.EXC_DANGER,
       () => {
-        this.store.dispatch(new CenterActions.Delete(item.id))
+        this.store.dispatch(new TypeWorkerActions.Delete(item.id))
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
-          const result = response.center.result;
+          const result = response.Typeworker.result;
           this.toastService.notification(result.title, result.message, 'success', 4000);
         });
       }
@@ -97,10 +97,10 @@ export class ListComponent implements OnInit, OnDestroy {
       ICONS.EXC_DANGER,
       () => {
         this.selectedItems$.pipe(take(1)).subscribe((data) => {
-          this.store.dispatch(new CenterActions.DeleteAll(data))
+          this.store.dispatch(new TypeWorkerActions.DeleteAll(data))
           .pipe(takeUntil(this.destroy$))
           .subscribe((response: any) => {
-            const result = response.center.result;
+            const result = response.Typeworker.result;
             this.toastService.notification(result.title, result.message, 'success', 4000);
           });
         });
@@ -109,15 +109,15 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   onToggleItem(id: number) {
-    this.store.dispatch(new CenterActions.ToggleItemSelection(id, TYPES.LIST));
+    this.store.dispatch(new TypeWorkerActions.ToggleItemSelection(id, TYPES.LIST));
   }
 
   onToggleAll(checked: boolean) {
-    this.store.dispatch(new CenterActions.ToggleAllItems(checked, TYPES.LIST));
+    this.store.dispatch(new TypeWorkerActions.ToggleAllItems(checked, TYPES.LIST));
   }
 
   onFilterData(filter: FilterStateModel) {
     const columns: string[] = this.headers.filter(column => column.filtered).map(column => column.key);
-    this.store.dispatch(new CenterActions.Filter(filter, TYPES.LIST, columns));
+    this.store.dispatch(new TypeWorkerActions.Filter(filter, TYPES.LIST, columns));
   }
 }

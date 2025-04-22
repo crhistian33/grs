@@ -10,11 +10,11 @@ import { ACTIONS, ICONS, MESSAGES, SEVERITIES, TITLES, TYPES } from '@shared/uti
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
-import { Center } from '@models/masters/center.model';
-import { CENTER_TABLE_HEADERS } from '@table-headers/center-headers';
-import { CenterState } from '@states/center/center.state';
-import { CenterActions } from '@states/center/center.actions';
 import { LayoutAction } from '@shared/states/layout/layout.actions';
+import { TYPEWORKER_TABLE_HEADERS } from '@table-headers/typeworker-headers';
+import { TypeWorker } from '@models/masters/typeworker.model';
+import { TypeWorkerState } from '@states/typeworker/typeworker.state';
+import { TypeWorkerActions } from '@states/typeworker/typeworker.actions';
 
 @Component({
   selector: 'app-trashed',
@@ -30,18 +30,18 @@ export class TrashedComponent implements OnInit {
 
   title: string = TITLES.RECYCLE;
   typePage: string = TYPES.RECYCLE;
-  headers: ITableHeader<Center>[] = CENTER_TABLE_HEADERS;
+  headers: ITableHeader<TypeWorker>[] = TYPEWORKER_TABLE_HEADERS;
 
-  centers$: Observable<Center[]> = this.store.select(CenterState.getItemsTrashed);
-  areAllSelected$: Observable<boolean> = this.store.select(CenterState.areTrashedAllSelected);
-  hasSelectedItems$: Observable<boolean> = this.store.select(CenterState.hasTrashedSelectedItems);
-  selectedItems$: Observable<Center[]> = this.store.select(CenterState.getTrashedSelectedItems);
-  loading$: Observable<boolean> = this.store.select(CenterState.getLoading);
+  typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getItemsTrashed);
+  areAllSelected$: Observable<boolean> = this.store.select(TypeWorkerState.areTrashedAllSelected);
+  hasSelectedItems$: Observable<boolean> = this.store.select(TypeWorkerState.hasTrashedSelectedItems);
+  selectedItems$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getTrashedSelectedItems);
+  loading$: Observable<boolean> = this.store.select(TypeWorkerState.getLoading);
 
   ngOnInit(): void {
     this.store.dispatch([
-      new LayoutAction.SetTitle(TITLES.CENTERS),
-      new CenterActions.GetAllTrash
+      new LayoutAction.SetTitle(TITLES.TYPEWORKERS),
+      new TypeWorkerActions.GetAllTrash
     ]);
   }
 
@@ -50,7 +50,7 @@ export class TrashedComponent implements OnInit {
     this.destroy$.complete();
     this.store.dispatch([
       new LayoutAction.ClearTitle,
-      new CenterActions.ClearAll
+      new TypeWorkerActions.ClearAll
     ]);
   }
 
@@ -62,10 +62,10 @@ export class TrashedComponent implements OnInit {
       SEVERITIES.PRIMARY,
       ICONS.EXC_PRIMARY,
       () => {
-      this.store.dispatch(new CenterActions.Restore(item.id))
+      this.store.dispatch(new TypeWorkerActions.Restore(item.id))
       .pipe(takeUntil(this.destroy$))
       .subscribe((response: any) => {
-        const result = response.center.result;
+        const result = response.typeWorker.result;
         this.toastService.notification(result.title, result.message, 'success', 4000);
       });
     });
@@ -79,10 +79,10 @@ export class TrashedComponent implements OnInit {
       SEVERITIES.DANGER,
       ICONS.EXC_DANGER,
       () => {
-      this.store.dispatch(new CenterActions.DeleteForce(item.id))
+      this.store.dispatch(new TypeWorkerActions.DeleteForce(item.id))
       .pipe(takeUntil(this.destroy$))
       .subscribe((response: any) => {
-        const result = response.center.result;
+        const result = response.typeWorker.result;
         this.toastService.notification(result.title, result.message, 'success', 4000);
       });
     });
@@ -97,10 +97,10 @@ export class TrashedComponent implements OnInit {
       ICONS.EXC_PRIMARY,
       () => {
         this.selectedItems$.pipe(take(1)).subscribe((data) => {
-          this.store.dispatch(new CenterActions.RestoreAll(data))
+          this.store.dispatch(new TypeWorkerActions.RestoreAll(data))
           .pipe(takeUntil(this.destroy$))
           .subscribe((response: any) => {
-            const result = response.center.result;
+            const result = response.typeWorker.result;
             this.toastService.notification(result.title, result.message, 'success', 4000);
           });
         });
@@ -117,10 +117,10 @@ export class TrashedComponent implements OnInit {
       ICONS.EXC_DANGER,
       () => {
         this.selectedItems$.pipe(take(1)).subscribe((data) => {
-          this.store.dispatch(new CenterActions.DeleteForceAll(data))
+          this.store.dispatch(new TypeWorkerActions.DeleteForceAll(data))
           .pipe(takeUntil(this.destroy$))
           .subscribe((response: any) => {
-            const result = response.center.result;
+            const result = response.typeWorker.result;
             this.toastService.notification(result.title, result.message, 'success', 4000);
           });
         });
@@ -129,10 +129,10 @@ export class TrashedComponent implements OnInit {
   }
 
   onToggleItem(id: number) {
-    this.store.dispatch(new CenterActions.ToggleItemSelection(id, TYPES.RECYCLE));
+    this.store.dispatch(new TypeWorkerActions.ToggleItemSelection(id, TYPES.RECYCLE));
   }
 
   onToggleAll(checked: boolean) {
-    this.store.dispatch(new CenterActions.ToggleAllItems(checked, TYPES.RECYCLE));
+    this.store.dispatch(new TypeWorkerActions.ToggleAllItems(checked, TYPES.RECYCLE));
   }
 }
