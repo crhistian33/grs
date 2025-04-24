@@ -1,3 +1,5 @@
+<p-confirmdialog />
+<app-filter [filterItems]="filters" (filters)="onFilterData($event)" />
 <app-header-content
   [title]="title"
   [typePage]="typePage"
@@ -17,4 +19,3 @@
   (toggleItem)="onToggleItem($event)"
   (toggleAll)="onToggleAll($event)">
 </app-data-table>
-<p-confirmdialog />

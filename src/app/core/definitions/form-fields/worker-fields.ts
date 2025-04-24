@@ -3,6 +3,15 @@ import { IFormField } from "@shared/models/bases/form-fields.model";
 export const WORKER_FORM_FIELDS: IFormField[] = [
   {
     type: 'select',
+    key: 'company_id',
+    label: 'Empresa',
+    cols: 1,
+    validators: [
+      { name: 'required', value: 'required', message: 'La categoría es requerida' },
+    ],
+  },
+  {
+    type: 'select',
     key: 'type_worker_id',
     label: 'Tipo de trabajador',
     cols: 1,
@@ -31,7 +40,7 @@ export const WORKER_FORM_FIELDS: IFormField[] = [
     maxLength: 8
   },
   {
-    type: 'text',
+    type: 'date',
     key: 'birth_date',
     label: 'Fecha Nac.',
     cols: 1,
@@ -40,13 +49,12 @@ export const WORKER_FORM_FIELDS: IFormField[] = [
     ],
   },
   {
-    type: 'select',
-    key: 'company_id',
-    label: 'Empresa',
+    type: 'text',
+    key: 'bank_account',
+    label: 'Cuenta bancaria',
     cols: 1,
     validators: [
-      { name: 'required', value: 'required', message: 'La categoría es requerida' },
+      { name: 'required', value: 'required', message: 'La cuenta bancaria es requerida.' },
     ],
   },
-
 ];

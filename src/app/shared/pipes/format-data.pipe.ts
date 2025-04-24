@@ -12,6 +12,8 @@ export class FormatDataPipe implements PipeTransform {
     switch(type) {
       case 'entityName':
         return this.getRelationName(value);
+      case 'entityNames':
+        return this.getRelationNames(value);
       default:
         return String(value);
     }
@@ -22,5 +24,10 @@ export class FormatDataPipe implements PipeTransform {
       return (value as RelationType)['name'];
     }
     return '';
+  }
+
+  private getRelationNames(values: any): string {
+    const fields = values.map((item: any) => item.name);
+    return fields.join(', ');
   }
 }

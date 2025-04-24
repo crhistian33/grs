@@ -33,7 +33,7 @@ export class ListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   headers: ITableHeader<Demo>[] = DEMO_TABLE_HEADERS;
-  title: string = TITLES.LIST_DEMO;
+  title: string = TITLES.LIST;
   typePage: string = TYPES.LIST;
 
   demos$: Observable<Demo[]> = this.store.select(DemoState.getItems);
@@ -55,11 +55,11 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   onCreate() {
-    this.modalService.onModalForm(FormComponent, TITLES.CREATE_DEMO);
+    this.modalService.onModalForm(FormComponent, TITLES.CREATE);
   }
 
   onUpdate(item: any) {
-    this.modalService.onModalForm(FormComponent, TITLES.UPDATE_DEMO, item);
+    this.modalService.onModalForm(FormComponent, TITLES.UPDATE, item);
   }
 
   onDelete(item: any) {

@@ -9,6 +9,14 @@
           </p-iftalabel>
         </div>
       }
+      @if(item.type === 'date') {
+        <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
+          <p-iftalabel>
+            <p-datepicker [formControlName]="item.key" inputId="date" [appendTo]="'body'" showIcon iconDisplay="input" dateFormat="dd/mm/yy" styleClass="w-full" />
+            <label for="date">{{ item.label }}</label>
+          </p-iftalabel>
+        </div>
+      }
       @if(item.type === 'textarea') {
         <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
           <p-iftalabel>
@@ -21,8 +29,17 @@
       @if(item.type === 'select') {
         <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
           <p-iftalabel>
-            <p-select [inputId]="item.key" [options]="getOptionsSelect(item.key) | async" [formControlName]="item.key" optionLabel="name" optionValue="id" [showClear]="true" [ngClass]="{'ng-invalid ng-dirty': isInvalid(item.key)}" class="w-full" />
+            <p-select [inputId]="item.key" [options]="getOptionsSelect(item.key) | async" [formControlName]="item.key" optionLabel="name" optionValue="id" [appendTo]="'body'" [showClear]="true" [ngClass]="{'ng-invalid ng-dirty': isInvalid(item.key)}" class="w-full" />
             <label [for]="item.key">{{ item.label }}</label>
+          </p-iftalabel>
+        </div>
+      }
+
+      @if(item.type === 'multi-select') {
+        <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
+          <p-iftalabel>
+            <p-multiselect [inputId]="item.key" [options]="getOptionsSelect(item.key) | async" [formControlName]="item.key" optionLabel="name" [dataKey]="'id'" [filter]="true" [maxSelectedLabels]="3" [appendTo]="'body'" class="w-full" />
+            <label for="ms_cities">{{ item.label }}</label>
           </p-iftalabel>
         </div>
       }

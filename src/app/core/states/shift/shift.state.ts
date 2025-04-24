@@ -6,7 +6,7 @@ import { ShiftService } from '@services/masters/shift.service';
 import { ShiftActions } from '@states/shift/shift.actions';
 
 @State<ShiftStateModel>({
-  name: 'Shift',
+  name: 'shift',
   defaults: INITIAL_VALUES
 
 })

@@ -55,4 +55,10 @@ export const UNIT_FORM_FIELDS: IFormField[] = [
       { name: 'required', value: 'required', message: 'El centro de costo es requerido' },
     ],
   },
+  {
+    type: 'multi-select',
+    key: 'shifts',
+    label: 'Turnos',
+    cols: 1,
+  },
 ];

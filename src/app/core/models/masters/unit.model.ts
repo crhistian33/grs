@@ -2,6 +2,7 @@ import { BaseModel } from "@shared/models/bases/base.model";
 import { BaseStateModel, INITIAL_VALUES_BASE } from "@shared/models/bases/basestate-model";
 import { Center } from "./center.model";
 import { Customer } from "./customer.model";
+import { Shift } from "./shift.model";
 
 export interface Unit extends BaseModel {
   code: string;
@@ -10,6 +11,7 @@ export interface Unit extends BaseModel {
   min_assign: number;
   center: Center;
   customer: Customer;
+  shifts: Shift[];
 }
 
 export interface UnitResquest {

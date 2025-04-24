@@ -9,7 +9,7 @@ export interface Worker extends BaseModel {
   birth_date: string;
   bank_account: string;
   company: Company;
-  type_worker: TypeWorker;
+  typeworker: TypeWorker;
 }
 
 export interface WorkerResquest {

@@ -1,1 +1,21 @@
-<p>trashed works!</p>
+<p-confirmdialog />
+<app-filter [filterItems]="filters" (filters)="onFilterData($event)" />
+<app-header-content
+  [title]="title"
+  [typePage]="typePage"
+  (restoreAll)="onRestoreAll()"
+  (deleteAll)="onDeleteAll()"
+  [hasSelectedItem]="(hasSelectedItems$ | async) ?? false">
+</app-header-content>
+<app-data-table
+  [items]="shifts$ | async"
+  [headers]="headers"
+  [typePage]="typePage"
+  [areAllSelected]="(areAllSelected$ | async) ?? false"
+  [selectedItems]="selectedItems$ | async"
+  [loading]="(loading$ | async) ?? false"
+  (restore)="onRestore($event)"
+  (delete)="onDelete($event)"
+  (toggleItem)="onToggleItem($event)"
+  (toggleAll)="onToggleAll($event)">
+</app-data-table>

@@ -1,13 +1,9 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Category } from '@models/masters/category.model';
+import { Observable, of } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { RequestFormData } from '@shared/models/bases/base-request.model';
-import { IFormField } from '@shared/models/bases/form-fields.model';
-import { ModalService } from '@shared/services/ui/modal.service';
-import { ToastService } from '@shared/services/ui/toast.service';
-import { CategoryState } from '@states/category/category.state';
+
 import { ButtonModule } from 'primeng/button';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { IftaLabelModule } from 'primeng/iftalabel';
@@ -15,11 +11,27 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
-import { Observable, of } from 'rxjs';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DatePickerModule } from 'primeng/datepicker';
+
+import { Company } from '@models/masters/company.model';
+import { RequestFormData } from '@shared/models/bases/base-request.model';
+import { IFormField } from '@shared/models/bases/form-fields.model';
+import { ModalService } from '@shared/services/ui/modal.service';
+import { ToastService } from '@shared/services/ui/toast.service';
+import { CompanyState } from '@states/company/company.state';
+import { Shift } from '@models/masters/shift.model';
+import { ShiftState } from '@states/shift/shift.state';
+import { Customer } from '@models/masters/customer.model';
+import { CustomerState } from '@states/customer/customer.state';
+import { CenterState } from '@states/center/center.state';
+import { Center } from '@models/masters/center.model';
+import { TypeWorker } from '@models/masters/typeworker.model';
+import { TypeWorkerState } from '@states/typeworker/typeworker.state';
 
 @Component({
   selector: 'app-form-builder',
-  imports: [CommonModule, IftaLabelModule, InputTextModule, SelectModule, TextareaModule, ButtonModule, ReactiveFormsModule, ToastModule],
+  imports: [CommonModule, IftaLabelModule, InputTextModule, SelectModule, TextareaModule, ButtonModule, ReactiveFormsModule, ToastModule, MultiSelectModule, DatePickerModule],
   templateUrl: './form-builder.component.html',
   styleUrl: './form-builder.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,13 +42,18 @@ export class FormBuilderComponent implements OnChanges {
   private fb = inject(FormBuilder);
   private modalService = inject(ModalService);
   public config = inject(DynamicDialogConfig);
+  private datePipe = inject(DatePipe);
 
   @Input() formFields: IFormField[] = [];
   @Output() formData = new EventEmitter<RequestFormData>();
   myForm!: FormGroup;
   entityID!: number;
 
-  categories$: Observable<Category[]> = this.store.select(CategoryState.getItems);
+  companies$: Observable<Company[]> = this.store.select(CompanyState.getItems);
+  customers$: Observable<Customer[]> = this.store.select(CustomerState.getItems);
+  centers$: Observable<Center[]> = this.store.select(CenterState.getItems);
+  shifts$: Observable<Shift[]> = this.store.select(ShiftState.getItems);
+  typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getItems);
 
   ngOnInit() {
     this.createFormGroup();
@@ -58,8 +75,17 @@ export class FormBuilderComponent implements OnChanges {
 
       Object.keys(this.myForm.controls).forEach(controlName => {
         switch (controlName) {
-          case 'category_id':
-            this.myForm.get(controlName)?.setValue(data['category'].id);
+          case 'company_id':
+            this.myForm.get(controlName)?.setValue(data['company'].id);
+            break;
+          case 'customer_id':
+            this.myForm.get(controlName)?.setValue(data['customer'].id);
+            break;
+          case 'center_id':
+            this.myForm.get(controlName)?.setValue(data['center'].id);
+            break;
+          case 'type_worker_id':
+            this.myForm.get(controlName)?.setValue(data['typeworker'].id);
             break;
           default:
             this.myForm.get(controlName)?.setValue(data[controlName]);
@@ -77,6 +103,7 @@ export class FormBuilderComponent implements OnChanges {
         case 'required': return Validators.required;
         case 'maxLength(20)': return Validators.maxLength(20);
         case 'pattern(8)': return Validators.pattern('^[0-9]{8}$');
+        case 'pattern(11)': return Validators.pattern('^[0-9]{11}$');
         case 'pattern(9)': return Validators.pattern('^[0-9]{1,9}$');
         default: return null;
       }
@@ -84,6 +111,7 @@ export class FormBuilderComponent implements OnChanges {
   }
 
   onSubmit(close: boolean) {
+    console.log(this.myForm.value);
     if (this.myForm.valid) {
       if(close) {
         this.entityID
@@ -151,10 +179,37 @@ export class FormBuilderComponent implements OnChanges {
 
   getOptionsSelect(id: string): Observable<any> {
     switch(id) {
-      case 'category_id':
-        return this.categories$;
+      case 'company_id':
+        return this.companies$;
+      case 'customer_id':
+        return this.customers$;
+      case 'center_id':
+        return this.centers$;
+      case 'type_worker_id':
+        return this.typeworkers$;
+      case 'shifts':
+        return this.shifts$;
       default:
         return of([]);
     }
+  }
+
+  onDateSelect(date: Date, controlName: string) {
+    this.myForm.get(controlName)?.setValue(
+      date.toISOString().split('T')[0],
+      { emitEvent: false }
+    );
+  }
+
+  getDisplayDate(controlName: string) {
+    const apiDate = this.myForm.get(controlName)?.value;
+    if (!apiDate) return '';
+
+    // Convertir de yy-mm-dd a Date object
+    const parts = apiDate.split('-');
+    const date = new Date(2000 + parseInt(parts[0]), parts[1] - 1, parts[2]);
+
+    // Formatear para mostrar (dd/mm/yy)
+    return this.datePipe.transform(date, 'dd/MM/yy') || '';
   }
 }

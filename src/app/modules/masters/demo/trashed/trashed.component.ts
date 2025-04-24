@@ -27,7 +27,7 @@ export class TrashedComponent implements OnInit {
   private toastService = inject(ToastService);
   private destroy$ = new Subject<void>();
 
-  title: string = TITLES.RECYCLE_DEMO;
+  title: string = TITLES.RECYCLE;
   typePage: string = TYPES.RECYCLE;
   headers: ITableHeader<Demo>[] = DEMO_TABLE_HEADERS;
 

@@ -12,27 +12,11 @@ export const TITLES = {
   UPDATE: 'Actualizar registro',
   LIST: 'Listado',
   RECYCLE: 'Papelera de reciclaje',
-  /* Demo */
-  CREATE_DEMO: 'Nueva demo',
-  UPDATE_DEMO: 'Actualizar demo',
-  LIST_DEMO: 'Listado de demos',
-  RECYCLE_DEMO: 'Papelera de demos',
-  /* Center */
-  CREATE_CENTER: 'Nuevo centro de costo',
-  UPDATE_CENTER: 'Actualizar centro de costo',
-  LIST_CENTER: 'Listado de centros de costo',
-  RECYCLE_CENTER: 'Papelera de centros de costo',
-  /* TypeWorker */
-  CREATE_TYPEWORKER: 'Nuevo registro',
-  UPDATE_TYPEWORKER: 'Actualizar registro',
-  LIST_TYPEWORKER: 'Listado',
-  RECYCLE_TYPEWORKER: 'Papelera de reciclaje',
   /* Confirm */
   CONFIRM_RESTORE: '¿Desea restaurar el registro?',
   CONFIRM_RESTORE_ALL: '¿Desea restaurar los registros?',
   CONFIRM_DELETE: '¿Desea eliminar el registro?',
   CONFIRM_DELETE_ALL: '¿Desea eliminar los registros?',
-
 }
 
 export const MESSAGES = {
@@ -64,4 +48,14 @@ export const SEVERITIES = {
 export const ICONS = {
   EXC_DANGER: 'pi pi-exclamation-circle text-red-500',
   EXC_PRIMARY: 'pi pi-exclamation-circle text-primary',
+}
+
+export const IDS = {
+  COMPANY: 'companyId',
+  CUSTOMER: 'customerId',
+  UNIT: 'unitId',
+  SHIFT: 'shiftId',
+  CENTER: 'centerId',
+  TYPEWORKER: 'typeworkerId',
+  WORKER: 'workerId'
 }

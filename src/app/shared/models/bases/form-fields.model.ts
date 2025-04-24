@@ -1,5 +1,5 @@
 export interface IFormField {
-  type: 'text' | 'tel' | 'textarea' | 'number' | 'select' | 'date' | 'checkbox';
+  type: 'text' | 'tel' | 'textarea' | 'number' | 'select' | 'multi-select' | 'date' | 'checkbox';
   key: string;
   label: string;
   cols: number;

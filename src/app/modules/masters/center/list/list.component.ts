@@ -7,17 +7,18 @@ import { ModalService } from '@shared/services/ui/modal.service';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ITableHeader } from '@shared/models/bases/table-headers.model';
-import { ACTIONS, ICONS, MESSAGES, SEVERITIES, TITLES, TYPES } from '@shared/utils/constants';
+import { ACTIONS, ICONS, IDS, MESSAGES, SEVERITIES, TITLES, TYPES } from '@shared/utils/constants';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { ToastService } from '@shared/services/ui/toast.service';
 import { FilterComponent } from '@shared/components/filter/filter.component';
-import { FilterOptions, FilterStateModel } from '@shared/models/ui/filter.model';
+import { FilterStateModel } from '@shared/models/ui/filter.model';
 import { CENTER_TABLE_HEADERS } from '@table-headers/center-headers';
 import { Center } from '@models/masters/center.model';
 import { CenterState } from '@states/center/center.state';
 import { CenterActions } from '@states/center/center.actions';
 import { LayoutAction } from '@shared/states/layout/layout.actions';
+import { APP_FILTERS } from 'src/app/core/definitions/filters';
 
 @Component({
   selector: 'app-list',
@@ -35,9 +36,7 @@ export class ListComponent implements OnInit, OnDestroy {
   headers: ITableHeader<Center>[] = CENTER_TABLE_HEADERS;
   title: string = TITLES.LIST;
   typePage: string = TYPES.LIST;
-  fieldsFilter: FilterOptions = {
-    search: true
-  }
+  filters = APP_FILTERS.filter(filter => filter.modules.includes(IDS.CENTER));
 
   centers$: Observable<Center[]> = this.store.select(CenterState.getItems);
   areAllSelected$: Observable<boolean> = this.store.select(CenterState.areAllSelected);
@@ -49,7 +48,7 @@ export class ListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch([
       new LayoutAction.SetTitle(TITLES.CENTERS),
-      new CenterActions.GetAll
+      new CenterActions.GetAll()
     ]);
   }
 
@@ -57,8 +56,8 @@ export class ListComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.store.dispatch([
-      new LayoutAction.ClearTitle,
-      new CenterActions.ClearAll
+      new LayoutAction.ClearTitle(),
+      new CenterActions.ClearAll()
     ]);
   }
 

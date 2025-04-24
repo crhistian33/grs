@@ -7,7 +7,7 @@ import { tap } from 'rxjs';
 import { ApiResCollection, ApiResSingle } from '@shared/models/bases/response.model';
 import { SetLoading } from '@shared/states/loading/loading.actions';
 import { TYPES } from '@shared/utils/constants';
-import { FilterOptions, FilterStateModel } from '@shared/models/ui/filter.model';
+import { FilterStateModel } from '@shared/models/ui/filter.model';
 
 @Injectable()
 export abstract class BaseState<T extends BaseModel, R>  {
@@ -291,12 +291,16 @@ export abstract class BaseState<T extends BaseModel, R>  {
   protected filterBase(ctx: StateContext<BaseStateModel<T>>, payload: Partial<FilterStateModel>, page: string, columns: (keyof T)[]) {
     ctx.patchState({ loading: true });
     const state = ctx.getState();
-    const { search, categoryId } = payload;
-    console.log('Busqueda', search);
+    const { search, companyId, customerId, unitId, shiftId, centerId, typeworkerId } = payload;
     const data = page === TYPES.LIST ? state.entities : state.trashEntities;
 
     const filtered = data.filter((item: any) => {
-      const matchDrop = !categoryId || item.category.id === categoryId;
+      const matchDrop = (!companyId || item.company.id === companyId) &&
+                        (!customerId || item.customer.id === customerId) &&
+                        (!unitId || item.unit.id === unitId) &&
+                        (!shiftId || item.shift.id === shiftId) &&
+                        (!centerId || item.center.id === centerId) &&
+                        (!typeworkerId || item.typeworker.id === typeworkerId);
 
       if(!search)
         return matchDrop;

@@ -6,7 +6,7 @@ import { ModalService } from '@shared/services/ui/modal.service';
 import { ToastService } from '@shared/services/ui/toast.service';
 import { DataTableComponent } from '@shared/components/data-table/data-table.component';
 import { HeaderContentComponent } from '@shared/components/header-content/header-content.component';
-import { ACTIONS, ICONS, MESSAGES, SEVERITIES, TITLES, TYPES } from '@shared/utils/constants';
+import { ACTIONS, ICONS, IDS, MESSAGES, SEVERITIES, TITLES, TYPES } from '@shared/utils/constants';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
@@ -15,10 +15,13 @@ import { CENTER_TABLE_HEADERS } from '@table-headers/center-headers';
 import { CenterState } from '@states/center/center.state';
 import { CenterActions } from '@states/center/center.actions';
 import { LayoutAction } from '@shared/states/layout/layout.actions';
+import { APP_FILTERS } from 'src/app/core/definitions/filters';
+import { FilterComponent } from '@shared/components/filter/filter.component';
+import { FilterStateModel } from '@shared/models/ui/filter.model';
 
 @Component({
   selector: 'app-trashed',
-  imports: [CommonModule, HeaderContentComponent, DataTableComponent, ConfirmDialog, ButtonModule],
+  imports: [CommonModule, HeaderContentComponent, DataTableComponent, ConfirmDialog, ButtonModule, FilterComponent],
   templateUrl: './trashed.component.html',
   styleUrl: './trashed.component.scss'
 })
@@ -31,6 +34,7 @@ export class TrashedComponent implements OnInit {
   title: string = TITLES.RECYCLE;
   typePage: string = TYPES.RECYCLE;
   headers: ITableHeader<Center>[] = CENTER_TABLE_HEADERS;
+  filters = APP_FILTERS.filter(filter => filter.modules.includes(IDS.CENTER));
 
   centers$: Observable<Center[]> = this.store.select(CenterState.getItemsTrashed);
   areAllSelected$: Observable<boolean> = this.store.select(CenterState.areTrashedAllSelected);
@@ -41,7 +45,7 @@ export class TrashedComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch([
       new LayoutAction.SetTitle(TITLES.CENTERS),
-      new CenterActions.GetAllTrash
+      new CenterActions.GetAllTrash()
     ]);
   }
 
@@ -49,8 +53,8 @@ export class TrashedComponent implements OnInit {
     this.destroy$.next();
     this.destroy$.complete();
     this.store.dispatch([
-      new LayoutAction.ClearTitle,
-      new CenterActions.ClearAll
+      new LayoutAction.ClearTitle(),
+      new CenterActions.ClearAll()
     ]);
   }
 
@@ -134,5 +138,10 @@ export class TrashedComponent implements OnInit {
 
   onToggleAll(checked: boolean) {
     this.store.dispatch(new CenterActions.ToggleAllItems(checked, TYPES.RECYCLE));
+  }
+
+  onFilterData(filter: FilterStateModel) {
+    const columns: string[] = this.headers.filter(column => column.filtered).map(column => column.key);
+    this.store.dispatch(new CenterActions.Filter(filter, TYPES.RECYCLE, columns));
   }
 }

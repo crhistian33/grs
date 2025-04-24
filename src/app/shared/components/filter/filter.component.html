@@ -5,17 +5,19 @@
 
   <form [formGroup]="filterForm" (submit)="onSubmit()">
     <div class="flex flex-col gap-y-3">
-      @if(fieldsFilter.search) {
-        <p-iftalabel>
-          <input pInputText id="search" formControlName="search" autocomplete="off" class="w-full" />
-          <label for="search">Buscar</label>
-        </p-iftalabel>
-      }
-      @if(fieldsFilter.categoryId) {
-        <p-iftalabel>
-          <p-select id="category" formControlName="categoryId" [options]="getOptionsSelect('category') | async" optionLabel="name" optionValue="id" [showClear]="true" class="w-full" />
-          <label for="category">Categorías</label>
-        </p-iftalabel>
+      @for (item of filterItems; track $index) {
+        @if(item.type === 'input') {
+          <p-iftalabel>
+            <input pInputText [id]="item.key" [formControlName]="item.key" autocomplete="off" class="w-full" />
+            <label [for]="item.key">{{ item.label }}</label>
+          </p-iftalabel>
+        }
+        @if(item.type === 'select') {
+          <p-iftalabel>
+            <p-select [id]="item.key" [formControlName]="item.key" [options]="getOptionsSelect(item.key) | async" optionLabel="name" optionValue="id" [showClear]="true" class="w-full" />
+            <label [for]="item.key">{{ item.label }}</label>
+          </p-iftalabel>
+        }
       }
     </div>
   </form>

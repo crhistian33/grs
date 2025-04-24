@@ -30,7 +30,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
   submitFormData(formData: RequestFormData) {
     const { id, data, close, onReset } = formData;
-    console.log(data, id);
     const action = id
     ? new DemoActions.Update(id, data)
     : new DemoActions.Create(data);

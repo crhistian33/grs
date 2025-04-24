@@ -1,11 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Category } from '@models/masters/category.model';
+import { Center } from '@models/masters/center.model';
+import { Company } from '@models/masters/company.model';
+import { Customer } from '@models/masters/customer.model';
+import { TypeWorker } from '@models/masters/typeworker.model';
+import { Unit } from '@models/masters/unit.model';
 import { Store } from '@ngxs/store';
-import { FilterOptions, FilterStateModel } from '@shared/models/ui/filter.model';
+import { FilterDefinition } from '@shared/models/bases/filters.model';
+import { FilterStateModel } from '@shared/models/ui/filter.model';
 import { ToggleStateService } from '@shared/services/ui/togglestate.service';
+import { IDS } from '@shared/utils/constants';
 import { CategoryState } from '@states/category/category.state';
+import { CenterState } from '@states/center/center.state';
+import { CompanyState } from '@states/company/company.state';
+import { CustomerState } from '@states/customer/customer.state';
+import { TypeWorkerState } from '@states/typeworker/typeworker.state';
+import { UnitState } from '@states/unit/unit.state';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { IftaLabelModule } from 'primeng/iftalabel';
@@ -19,23 +30,34 @@ import { Observable, of } from 'rxjs';
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.scss'
 })
-export class FilterComponent {
+export class FilterComponent implements OnInit {
   private store = inject(Store);
   private toggleStateService = inject(ToggleStateService);
   private fb = inject(FormBuilder);
 
   @Output() filters = new EventEmitter<FilterStateModel>();
-  @Input() fieldsFilter!: FilterOptions;
+  @Input() filterItems!: FilterDefinition[];
   visible = this.toggleStateService.filterData;
-  filterForm: FormGroup;
+  filterForm!: FormGroup;
 
-  categories$: Observable<Category[]> = this.store.select(CategoryState.getItems);
+  companies$: Observable<Company[]> = this.store.select(CompanyState.getItems);
+  customers$: Observable<Customer[]> = this.store.select(CustomerState.getItems);
+  units$: Observable<Unit[]> = this.store.select(UnitState.getItems);
+  typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getItems);
+  centers$: Observable<Center[]> = this.store.select(CenterState.getItems);
 
-  constructor() {
-    this.filterForm = this.fb.group({
-      search: [null],
-      categoryId: [null]
+  ngOnInit(): void {
+    this.createFilterForm();
+  }
+
+  createFilterForm() {
+    const filterFormConfig: {[key: string]: any} = {};
+
+    this.filterItems.forEach(field => {
+      filterFormConfig[field.key] = [null];
     });
+
+    this.filterForm = this.fb.group(filterFormConfig);
   }
 
   onHide() {
@@ -59,8 +81,16 @@ export class FilterComponent {
 
   getOptionsSelect(id: string): Observable<any> {
     switch(id) {
-      case 'category':
-        return this.categories$;
+      case IDS.COMPANY:
+        return this.companies$;
+      case IDS.CUSTOMER:
+        return this.customers$;
+      case IDS.CENTER:
+        return this.centers$;
+      case IDS.TYPEWORKER:
+        return this.typeworkers$;
+      case IDS.UNIT:
+        return this.units$;
       default:
         return of([]);
     }

@@ -19,8 +19,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       toastService.notification(errorTitle, errorMessage, 'error', 4000);
 
-      console.log('Error console', error, error.status);
-
       if(error.status === 401)
         router.navigateByUrl('/auth/login');
 

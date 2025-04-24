@@ -35,6 +35,17 @@ export const CUSTOMER_FORM_FIELDS: IFormField[] = [
     cols: 1,
     validators: [
       { name: 'required', value: 'required', message: 'El RUC es requerido' },
+      { name: 'pattern', value: 'pattern(11)', message: 'El RUC debe tener 11 dígitos numéricos.'}
+    ],
+    maxLength: 11
+  },
+  {
+    type: 'text',
+    key: 'address',
+    label: 'Dirección',
+    cols: 2,
+    validators: [
+      { name: 'required', value: 'required', message: 'La dirección es requerida' },
     ],
   },
   {
@@ -47,14 +58,5 @@ export const CUSTOMER_FORM_FIELDS: IFormField[] = [
       { name: 'pattern', value: 'pattern(9)', message: 'El teléfono solo permite dígitos numéricos.'}
     ],
     maxLength: 9
-  },
-  {
-    type: 'text',
-    key: 'address',
-    label: 'Dirección',
-    cols: 2,
-    validators: [
-      { name: 'required', value: 'required', message: 'La dirección es requerida' },
-    ],
   },
 ];

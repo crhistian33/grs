@@ -30,6 +30,7 @@ import { ShiftState } from '@states/shift/shift.state';
 import { TypeWorkerState } from '@states/typeworker/typeworker.state';
 import { WorkerState } from '@states/worker/worker.state';
 import { LayoutState } from '@shared/states/layout/layout.state';
+import { DatePipe } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -79,6 +80,7 @@ export const appConfig: ApplicationConfig = {
     DynamicDialogRef,
     DynamicDialogConfig,
     ModalService,
-    ConfirmationService
+    ConfirmationService,
+    DatePipe
   ]
 };
