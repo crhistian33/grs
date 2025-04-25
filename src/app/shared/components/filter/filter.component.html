@@ -23,8 +23,23 @@
   </form>
   <ng-template #footer>
     <div class="flex items-center gap-2">
-      <button pButton label="Limpiar" icon="pi pi-eraser" class="w-full" severity="secondary" (click)="clearForm()"></button>
-      <button pButton label="Buscar" icon="pi pi-search" class="w-full" severity="primary" (click)="submitForm()"></button>
+      <p-button
+        label="Limpiar"
+        icon="pi pi-eraser"
+        styleClass="p-button-secondary w-full"
+        class="w-full"
+        size="small"
+        (click)="clearForm()"
+      ></p-button>
+      <p-button
+        label="Buscar"
+        icon="pi pi-search"
+        styleClass="border-cyan-700 bg-cyan-700 hover:bg-cyan-800 w-full"
+        class="w-full"
+        size="small"
+        (click)="submitForm()"
+      ></p-button>
+
     </div>
   </ng-template>
 

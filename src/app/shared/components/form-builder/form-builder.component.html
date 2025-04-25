@@ -20,7 +20,7 @@
       @if(item.type === 'date') {
         <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
           <p-iftalabel>
-            <p-datepicker [formControlName]="item.key" inputId="date" [appendTo]="'body'" showIcon iconDisplay="input" dateFormat="dd/mm/yy" styleClass="w-full" />
+            <p-datepicker [formControlName]="item.key" inputId="date" [appendTo]="'body'" showIcon iconDisplay="input" dateFormat="dd/mm/yy" [ngClass]="{'ng-invalid ng-dirty': isInvalid(item.key)}" styleClass="w-full" />
             <label for="date">{{ item.label }}</label>
           </p-iftalabel>
         </div>
@@ -57,9 +57,10 @@
     <div class="col-span-1 md:col-span-2 flex justify-end gap-2">
       <p-button
         label="Cancelar"
-        styleClass="p-button-secondary"
         type="button"
+        styleClass="border-indigo-100 bg-indigo-100 hover:bg-indigo-200 text-gray-800"
         (onClick)="onCancel()"
+        size="small"
       ></p-button>
       @if(!entityID) {
         <p-button
@@ -67,11 +68,14 @@
           styleClass="p-button-info"
           type="button"
           (onClick)="onSubmit(false)"
+          size="small"
         ></p-button>
       }
       <p-button
         [label]="entityID ? 'Actualizar' : 'Guardar'"
         type="submit"
+        styleClass="border-cyan-700 bg-cyan-700 hover:bg-cyan-800"
+        size="small"
       ></p-button>
     </div>
   </div>

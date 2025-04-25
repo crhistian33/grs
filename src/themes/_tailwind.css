@@ -3,14 +3,22 @@
 @import "tailwindcss";
 
 @layer components {
-  /* Cambio de estilos para cabecera de tablas */
-  /* .p-datatable-thead > tr > th {
-    @apply bg-gray-400 text-white;
-  } */
   .p-tooltip-arrow {
     display: none;
   }
   .p-tooltip .p-tooltip-text {
     @apply text-sm p-2;
+  }
+
+  .p-select:not(.p-disabled).p-focus,
+  .p-inputtext:not(.p-disabled):focus,
+  .p-component:not(.p-disabled).p-focus {
+    border-color: var(--color-cyan-600);
+    box-shadow: 0 0 0 var(--p-select-focus-ring-width) rgba(8, 145, 178, 0.2);
+    outline: var(--p-select-focus-ring-width) var(--color-cyan-600);
+  }
+
+  .p-iftalabel:has(input:focus) label, .p-iftalabel:has(input:-webkit-autofill) label, .p-iftalabel:has(textarea:focus) label, .p-iftalabel:has(.p-inputwrapper-focus) label {
+    color: var(--color-cyan-600);
   }
 }

@@ -11,7 +11,6 @@ import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
 import { withNgxsRouterPlugin } from '@ngxs/router-plugin';
 import { withNgxsStoragePlugin } from '@ngxs/storage-plugin';
 import { provideStore } from '@ngxs/store';
-import { DemoState } from '@states/demo/demo.state';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -21,7 +20,6 @@ import { errorInterceptor } from '@interceptors/error.interceptor';
 import { BreadcrumbState } from '@shared/states/breadcrumb/breadcrumb.state';
 import { AuthState } from '@states/auth/auth.state';
 import { authInterceptor } from '@interceptors/auth.interceptor';
-import { CategoryState } from '@states/category/category.state';
 import { CenterState } from '@states/center/center.state';
 import { CompanyState } from '@states/company/company.state';
 import { CustomerState } from '@states/customer/customer.state';
@@ -31,6 +29,7 @@ import { TypeWorkerState } from '@states/typeworker/typeworker.state';
 import { WorkerState } from '@states/worker/worker.state';
 import { LayoutState } from '@shared/states/layout/layout.state';
 import { DatePipe } from '@angular/common';
+import { MyPreset } from './mypreset';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,7 +38,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     providePrimeNG({
       theme: {
-        preset: Aura,
+        preset: MyPreset,
         options: {
           darkModeSelector: '.my-app-dark',
           cssLayer: {
