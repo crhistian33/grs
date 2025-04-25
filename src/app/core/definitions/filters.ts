@@ -28,9 +28,9 @@ export const APP_FILTERS: FilterDefinition[] = [
   },
   {
     type: 'select',
-    label: IDS.SHIFT,
+    label: 'Turnos',
     key: 'shiftId',
-    modules: [],
+    modules: [IDS.UNIT],
   },
   {
     type: 'select',

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Center } from '@models/masters/center.model';
 import { Company } from '@models/masters/company.model';
 import { Customer } from '@models/masters/customer.model';
+import { Shift } from '@models/masters/shift.model';
 import { TypeWorker } from '@models/masters/typeworker.model';
 import { Unit } from '@models/masters/unit.model';
 import { Store } from '@ngxs/store';
@@ -15,6 +16,7 @@ import { CategoryState } from '@states/category/category.state';
 import { CenterState } from '@states/center/center.state';
 import { CompanyState } from '@states/company/company.state';
 import { CustomerState } from '@states/customer/customer.state';
+import { ShiftState } from '@states/shift/shift.state';
 import { TypeWorkerState } from '@states/typeworker/typeworker.state';
 import { UnitState } from '@states/unit/unit.state';
 import { ButtonModule } from 'primeng/button';
@@ -45,6 +47,7 @@ export class FilterComponent implements OnInit {
   units$: Observable<Unit[]> = this.store.select(UnitState.getItems);
   typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getItems);
   centers$: Observable<Center[]> = this.store.select(CenterState.getItems);
+  shifts$: Observable<Shift[]> = this.store.select(ShiftState.getItems);
 
   ngOnInit(): void {
     this.createFilterForm();
@@ -91,6 +94,8 @@ export class FilterComponent implements OnInit {
         return this.typeworkers$;
       case IDS.UNIT:
         return this.units$;
+      case IDS.SHIFT:
+        return this.shifts$;
       default:
         return of([]);
     }

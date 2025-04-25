@@ -8,12 +8,11 @@
   [showCurrentPageReport]="true"
   currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
   [rowsPerPageOptions]="[5, 10, 25, 50]"
-  styleClass="p-datatable-sm"
-  class="p-datatable-sm"
   [loading]="loading"
-  [showLoader]="false">
+  [showLoader]="false"
+  size="small">
   <ng-template pTemplate="loadingbody">
-    <tr *ngFor="let _ of [1,2,3,4,5]">
+    <tr *ngFor="let _ of [1,2,3,4, 5]">
       <td>
         <p-skeleton></p-skeleton>
       </td>
