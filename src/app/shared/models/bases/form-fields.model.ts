@@ -5,6 +5,7 @@ export interface IFormField {
   cols: number;
   validators?: ValidatorConfig[];
   defaultValue?: any;
+  prevcode?: string;
   maxLength?: number;
   disabled?: boolean;
   hidden?: boolean;

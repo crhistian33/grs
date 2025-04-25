@@ -6,6 +6,7 @@ export const CUSTOMER_FORM_FIELDS: IFormField[] = [
     key: 'company_id',
     label: 'Empresa',
     cols: 1,
+    prevcode: 'code',
     validators: [
       { name: 'required', value: 'required', message: 'La empresa es requerida' },
     ],

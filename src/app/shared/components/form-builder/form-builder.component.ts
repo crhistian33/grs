@@ -13,6 +13,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DatePickerModule } from 'primeng/datepicker';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 import { Company } from '@models/masters/company.model';
 import { RequestFormData } from '@shared/models/bases/base-request.model';
@@ -31,7 +32,7 @@ import { TypeWorkerState } from '@states/typeworker/typeworker.state';
 
 @Component({
   selector: 'app-form-builder',
-  imports: [CommonModule, IftaLabelModule, InputTextModule, SelectModule, TextareaModule, ButtonModule, ReactiveFormsModule, ToastModule, MultiSelectModule, DatePickerModule],
+  imports: [CommonModule, IftaLabelModule, InputTextModule, SelectModule, TextareaModule, ButtonModule, ReactiveFormsModule, ToastModule, MultiSelectModule, DatePickerModule, InputNumberModule],
   templateUrl: './form-builder.component.html',
   styleUrl: './form-builder.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -111,7 +112,6 @@ export class FormBuilderComponent implements OnChanges {
   }
 
   onSubmit(close: boolean) {
-    console.log(this.myForm.value);
     if (this.myForm.valid) {
       if(close) {
         this.entityID
@@ -194,22 +194,21 @@ export class FormBuilderComponent implements OnChanges {
     }
   }
 
-  onDateSelect(date: Date, controlName: string) {
-    this.myForm.get(controlName)?.setValue(
-      date.toISOString().split('T')[0],
-      { emitEvent: false }
-    );
-  }
-
-  getDisplayDate(controlName: string) {
-    const apiDate = this.myForm.get(controlName)?.value;
-    if (!apiDate) return '';
-
-    // Convertir de yy-mm-dd a Date object
-    const parts = apiDate.split('-');
-    const date = new Date(2000 + parseInt(parts[0]), parts[1] - 1, parts[2]);
-
-    // Formatear para mostrar (dd/mm/yy)
-    return this.datePipe.transform(date, 'dd/MM/yy') || '';
+  onSelectItem(event: any, item: any) {
+    const { key, prevcode } = item;
+    if(prevcode) {
+      let getState;
+      if(key === 'company_id') {
+        getState = CompanyState.getItems;
+      }
+      if(key === 'customer_id') {
+        getState = CustomerState.getItems;
+      }
+      if(getState) {
+        const items = this.store.selectSnapshot(getState);
+        const item = items.find(el => el.id === event.value);
+        this.myForm.get(prevcode)?.setValue(item?.code + '-');
+      }
+    }
   }
 }

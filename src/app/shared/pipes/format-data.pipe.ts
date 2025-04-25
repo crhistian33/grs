@@ -10,6 +10,8 @@ export class FormatDataPipe implements PipeTransform {
     if (value === null || value === undefined) return '';
 
     switch(type) {
+      case 'currency':
+        return this.getCurrency(value);
       case 'entityName':
         return this.getRelationName(value);
       case 'entityNames':
@@ -17,6 +19,12 @@ export class FormatDataPipe implements PipeTransform {
       default:
         return String(value);
     }
+  }
+
+  private getCurrency(value: any) {
+    const numericValue = Number(value);
+    const formattedValue = numericValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    return `S/. ${formattedValue}`;
   }
 
   private getRelationName(value: any): string {

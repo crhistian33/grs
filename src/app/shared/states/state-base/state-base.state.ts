@@ -171,8 +171,9 @@ export abstract class BaseState<T extends BaseModel, R>  {
     return this.service.deleteAll(payload).pipe(
       tap({
         next: (response: ApiResSingle<T>) => {
-          const data = state.entities;
-          const entities = data.filter(item => !payload.some(element => element.id === item.id))
+          const deletedIds = Object.values(response.data);
+          const currentEntities = state.entities;
+          const entities = currentEntities.filter(item => !deletedIds.includes(item.id))
 
           ctx.patchState({
             entities,
@@ -185,6 +186,7 @@ export abstract class BaseState<T extends BaseModel, R>  {
           ctx.dispatch(new SetLoading(type, false));
         },
         finalize: () => {
+          this.toggleAllItem(ctx, false, TYPES.LIST);
           ctx.dispatch(new SetLoading(type, false));
         }
       })
@@ -307,7 +309,10 @@ export abstract class BaseState<T extends BaseModel, R>  {
 
       const matchSearch = !columns || columns.some((column) => {
         const value = item[column]?.toString().toLowerCase() || '';
-        return value.includes(search.toLowerCase());
+        const normalizedValue = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const normalizedSearch = search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return normalizedValue.includes(normalizedSearch);
+        //return value.includes(search.toLowerCase());
       });
 
       return matchDrop && matchSearch;

@@ -5,6 +5,7 @@ export const UNIT_FORM_FIELDS: IFormField[] = [
     type: 'select',
     key: 'customer_id',
     label: 'Cliente',
+    prevcode: 'code',
     cols: 1,
     validators: [
       { name: 'required', value: 'required', message: 'El cliente es requerido' },

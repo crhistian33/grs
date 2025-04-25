@@ -20,13 +20,12 @@ export const CENTER_FORM_FIELDS: IFormField[] = [
     ],
   },
   {
-    type: 'text',
+    type: 'number',
     key: 'mount',
     label: 'Monto (S/.)',
     cols: 1,
     validators: [
       { name: 'required', value: 'required', message: 'El monto es requerido.' },
     ],
-    maxLength: 8
   },
 ];

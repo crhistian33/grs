@@ -9,6 +9,14 @@
           </p-iftalabel>
         </div>
       }
+      @if (item.type === 'number') {
+        <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
+          <p-iftalabel>
+            <p-inputnumber [inputId]="item.key" [formControlName]="item.key" mode="currency" [currency]="'PEN'" [locale]="'es-PE'" class="w-full" [ngClass]="{'ng-invalid ng-dirty': isInvalid(item.key)}" />
+            <label [for]="item.key">{{ item.label }}</label>
+          </p-iftalabel>
+        </div>
+      }
       @if(item.type === 'date') {
         <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
           <p-iftalabel>
@@ -29,7 +37,7 @@
       @if(item.type === 'select') {
         <div [ngClass]="{'col-span-1': item.cols === 1, 'col-span-1 md:col-span-2' : item.cols === 2 }">
           <p-iftalabel>
-            <p-select [inputId]="item.key" [options]="getOptionsSelect(item.key) | async" [formControlName]="item.key" optionLabel="name" optionValue="id" [appendTo]="'body'" [showClear]="true" [ngClass]="{'ng-invalid ng-dirty': isInvalid(item.key)}" class="w-full" />
+            <p-select [inputId]="item.key" [options]="getOptionsSelect(item.key) | async" [formControlName]="item.key" optionLabel="name" optionValue="id" [appendTo]="'body'" [showClear]="true" [ngClass]="{'ng-invalid ng-dirty': isInvalid(item.key)}" class="w-full" (onChange)="onSelectItem($event, item)" />
             <label [for]="item.key">{{ item.label }}</label>
           </p-iftalabel>
         </div>

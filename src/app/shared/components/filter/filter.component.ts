@@ -65,12 +65,12 @@ export class FilterComponent implements OnInit {
   }
 
   onSubmit() {
+    this.toggleStateService.setFilter(false);
     this.filters.emit(this.filterForm.value);
   }
 
   submitForm() {
     this.onSubmit();
-    this.toggleStateService.setFilter(false);
   }
 
   clearForm() {
