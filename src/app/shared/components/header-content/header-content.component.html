@@ -8,7 +8,8 @@
       size="small"
       (onClick)="onFilter()">
     </p-button>
-    @if(typePage === 'Lista') {
+    @if(typePage === types.LIST) {
+      <ng-content></ng-content>
       <p-button
         icon="pi pi-trash"
         label="Papelera"
@@ -28,7 +29,7 @@
       [disabled]="!hasSelectedItem"
       (onClick)="onDeleteAll()"
     />
-    @if(typePage === 'Papelera') {
+    @if(typePage === types.RECYCLE) {
       <p-button
         icon="pi pi-undo"
         label="Restaurar selección"
@@ -37,6 +38,8 @@
         [disabled]="!hasSelectedItem"
         (onClick)="onRestoreAll()"
       />
+    }
+    @if(typePage === types.RECYCLE || typePage === types.CEASED) {
       <p-button
         icon="pi pi-arrow-right"
         iconPos="right"
@@ -46,7 +49,7 @@
         (onClick)="goBack()"
       />
     }
-    @if(typePage === 'Lista') {
+    @if(typePage === types.LIST) {
       <p-button
         icon="pi pi-plus"
         label="Crear"

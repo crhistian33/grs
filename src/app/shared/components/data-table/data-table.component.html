@@ -53,11 +53,15 @@
       }
       <td>
         <div class="flex justify-center gap-2">
-          @if(typePage === 'Papelera') {
+          @if(typePage === types.CEASED) {
+            <p-button icon="pi pi-refresh"  size="small" pTooltip="Renovar"
+              tooltipPosition="bottom" styleClass="bg-teal-500 border-teal-500 hover:bg-teal-600" (onClick)="onRenew(item); $event.stopPropagation()"></p-button>
+          }
+          @if(typePage === types.RECYCLE) {
             <p-button icon="pi pi-undo" severity="info" size="small" pTooltip="Restaurar"
               tooltipPosition="bottom" (onClick)="onRestore(item); $event.stopPropagation()"></p-button>
           }
-          @if(typePage === 'Lista') {
+          @if(typePage === types.LIST) {
             <p-button icon="pi pi-pencil" severity="warn" size="small" pTooltip="Editar"
               tooltipPosition="bottom" (onClick)="onUpdate(item); $event.stopPropagation()"></p-button>
           }

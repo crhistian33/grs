@@ -6,6 +6,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { Tooltip } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
 import { FormatDataPipe } from '@shared/pipes/format-data.pipe';
+import { TYPES } from '@shared/utils/constants';
 
 @Component({
   selector: 'app-data-table',
@@ -18,6 +19,7 @@ export class DataTableComponent {
   @Output() update = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
   @Output() restore = new EventEmitter<any>();
+  @Output() renew = new EventEmitter<any>();
   @Output() toggleItem = new EventEmitter<number>();
   @Output() toggleAll = new EventEmitter<boolean>();
   @Input() items: any;
@@ -26,6 +28,8 @@ export class DataTableComponent {
   @Input() areAllSelected: boolean = false;
   @Input() selectedItems: any;
   @Input() loading: boolean = false;
+
+  types = TYPES;
 
   onUpdate(item: any) {
     this.update.emit(item);
@@ -37,6 +41,10 @@ export class DataTableComponent {
 
   onRestore(item: any) {
     this.restore.emit(item);
+  }
+
+  onRenew(item: any) {
+    this.renew.emit(item);
   }
 
   onToggleItem(id: number) {

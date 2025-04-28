@@ -10,6 +10,8 @@ export interface Worker extends BaseModel {
   bank_account: string;
   company: Company;
   typeworker: TypeWorker;
+  start_date: string;
+  end_date: string;
 }
 
 export interface WorkerResquest {
@@ -21,8 +23,13 @@ export interface WorkerResquest {
   type_worker_id: number;
 }
 
-export interface WorkerStateModel extends BaseStateModel<Worker> {};
+export interface WorkerStateModel extends BaseStateModel<Worker> {
+  ceasedEntities?: Worker[];
+  filterCeasedEntities?: Worker[];
+};
 
 export const INITIAL_VALUES = {
-  ...INITIAL_VALUES_BASE
+  ...INITIAL_VALUES_BASE,
+  ceasedEntities: [],
+  filterCeasedEntities: [],
 }

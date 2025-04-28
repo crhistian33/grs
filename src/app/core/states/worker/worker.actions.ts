@@ -10,6 +10,10 @@ export namespace WorkerActions {
     static readonly type = '[Worker] Get All Trashed';
   }
 
+  export class GetAllCeased {
+    static readonly type = '[Worker] Get All Ceased';
+  }
+
   export class GetOne {
     static readonly type = '[Worker] Get One';
     constructor(public id: number) {}

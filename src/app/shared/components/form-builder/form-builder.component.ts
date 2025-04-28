@@ -43,7 +43,6 @@ export class FormBuilderComponent implements OnChanges {
   private fb = inject(FormBuilder);
   private modalService = inject(ModalService);
   public config = inject(DynamicDialogConfig);
-  private datePipe = inject(DatePipe);
 
   @Input() formFields: IFormField[] = [];
   @Output() formData = new EventEmitter<RequestFormData>();

@@ -12,6 +12,8 @@ export const TITLES = {
   UPDATE: 'Actualizar registro',
   LIST: 'Listado',
   RECYCLE: 'Papelera de reciclaje',
+  CEASED: 'Cesados',
+  RENEW: 'Renovar contrato',
   /* Confirm */
   CONFIRM_RESTORE: '¿Desea restaurar el registro?',
   CONFIRM_RESTORE_ALL: '¿Desea restaurar los registros?',
@@ -30,7 +32,8 @@ export const MESSAGES = {
 
 export const TYPES = {
   LIST: 'Lista',
-  RECYCLE: 'Papelera'
+  RECYCLE: 'Papelera',
+  CEASED: 'Cesados'
 }
 
 export const ACTIONS = {

@@ -3,17 +3,8 @@
 <app-header-content
   [title]="title"
   [typePage]="typePage"
-  [trashes]="(trashes$ | async) ?? 0"
-  (create)="onCreate()"
   (deleteAll)="onDeleteAll()"
   [hasSelectedItem]="(hasSelectedItems$ | async) ?? false">
-  <p-button
-    icon="pi pi-user-minus"
-    label="Cesados"
-    severity="secondary"
-    size="small"
-    routerLink="cesados">
-  </p-button>
 </app-header-content>
 <app-data-table
   [items]="workers$ | async"
@@ -22,7 +13,7 @@
   [areAllSelected]="(areAllSelected$ | async) ?? false"
   [selectedItems]="selectedItems$ | async"
   [loading]="(loading$ | async) ?? false"
-  (update)="onUpdate($event)"
+  (renew)="onRenew($event)"
   (delete)="onDelete($event)"
   (toggleItem)="onToggleItem($event)"
   (toggleAll)="onToggleAll($event)">

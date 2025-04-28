@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ToggleStateService } from '@shared/services/ui/togglestate.service';
+import { TYPES } from '@shared/utils/constants';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
@@ -24,6 +25,7 @@ export class HeaderContentComponent {
   @Input() hasSelectedItem: boolean = false;
   @Input() trashes: number = 0;
 
+  types = TYPES;
   fallbackUrl = '/';
 
   onOpenCreate() {
