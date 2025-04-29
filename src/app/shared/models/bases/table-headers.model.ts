@@ -1,7 +1,7 @@
 export interface ITableHeader<T> {
   key: keyof T;
   label: string;
-  type: 'text' | 'date' | 'number' | 'currency' | 'month' | 'entityName' | 'entityNames';
+  type: 'text' | 'date' | 'number' | 'boolean' | 'currency' | 'month' | 'entityName' | 'entityNames';
   filtered?: boolean;
 }
 

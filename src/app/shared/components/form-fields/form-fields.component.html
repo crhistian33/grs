@@ -1,0 +1,52 @@
+<div [formGroup]="myForm">
+  @if (field.type === 'text' || field.type === 'tel') {
+    <div [ngClass]="{'col-span-1': field.cols === 1, 'col-span-1 md:col-span-2' : field.cols === 2 }">
+      <p-iftalabel>
+        <input [type]="field.type" pInputText [id]="field.key" [formControlName]="field.key" autocomplete="off" class="w-full" [ngClass]="{'ng-invalid ng-dirty': isInvalid}" [maxlength]="field.maxLength ?? ''" />
+        <label [for]="field.key">{{ field.label }}</label>
+      </p-iftalabel>
+    </div>
+  }
+  @if (field.type === 'number') {
+    <div [ngClass]="{'col-span-1': field.cols === 1, 'col-span-1 md:col-span-2' : field.cols === 2 }">
+      <p-iftalabel>
+        <p-inputnumber [inputId]="field.key" [formControlName]="field.key" mode="currency" [currency]="'PEN'" [locale]="'es-PE'" class="w-full" [ngClass]="{'ng-invalid ng-dirty': isInvalid}" />
+        <label [for]="field.key">{{ field.label }}</label>
+      </p-iftalabel>
+    </div>
+  }
+  @if(field.type === 'date') {
+    <div [ngClass]="{'col-span-1': field.cols === 1, 'col-span-1 md:col-span-2' : field.cols === 2 }">
+      <p-iftalabel>
+        <p-datepicker [formControlName]="field.key" inputId="date" [appendTo]="'body'" showIcon iconDisplay="input" dateFormat="dd/mm/yy" [ngClass]="{'ng-invalid ng-dirty': isInvalid}" styleClass="w-full" />
+        <label for="date">{{ field.label }}</label>
+      </p-iftalabel>
+    </div>
+  }
+  @if(field.type === 'textarea') {
+    <div [ngClass]="{'col-span-1': field.cols === 1, 'col-span-1 md:col-span-2' : field.cols === 2 }">
+      <p-iftalabel>
+        <textarea pTextarea [id]="field.key" [formControlName]="field.key" rows="5" cols="30" class="w-full resize-none"></textarea>
+        <label [for]="field.key">{{ field.label }}</label>
+      </p-iftalabel>
+    </div>
+  }
+
+  @if(field.type === 'select') {
+    <div [ngClass]="{'col-span-1': field.cols === 1, 'col-span-1 md:col-span-2' : field.cols === 2 }">
+      <p-iftalabel>
+        <p-select [inputId]="field.key" [options]="optionsSelect" [formControlName]="field.key" optionLabel="name" optionValue="id" [appendTo]="'body'" [showClear]="true" [ngClass]="{'ng-invalid ng-dirty': isInvalid}" class="w-full" (onChange)="onSelectfield($event)" />
+        <label [for]="field.key">{{ field.label }}</label>
+      </p-iftalabel>
+    </div>
+  }
+
+  @if(field.type === 'multi-select') {
+    <div [ngClass]="{'col-span-1': field.cols === 1, 'col-span-1 md:col-span-2' : field.cols === 2 }">
+      <p-iftalabel>
+        <p-multiselect [inputId]="field.key" [options]="optionsSelect" [formControlName]="field.key" optionLabel="name" [dataKey]="'id'" [filter]="true" [maxSelectedLabels]="3" [appendTo]="'body'" class="w-full" />
+        <label for="ms_cities">{{ field.label }}</label>
+      </p-iftalabel>
+    </div>
+  }
+</div>

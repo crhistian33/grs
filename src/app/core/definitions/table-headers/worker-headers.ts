@@ -10,4 +10,5 @@ export const WORKER_TABLE_HEADERS: ITableHeader<Worker>[] = [
   { key: 'company', label: 'Empresa', type: 'entityName', filtered: false },
   { key: 'start_date', label: 'Fecha de inicio', type: 'date', filtered: false },
   { key: 'end_date', label: 'Fecha de cese', type: 'date', filtered: false },
+  { key: 'state', label: 'Estado', type: 'text', filtered: false },
 ];

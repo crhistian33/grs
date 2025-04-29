@@ -69,8 +69,8 @@ export class TrashedComponent implements OnInit {
       TITLES.CONFIRM_RESTORE,
       MESSAGES.MESSAGE_RESTORE,
       ACTIONS.RESTORE,
-      SEVERITIES.PRIMARY,
-      ICONS.EXC_PRIMARY,
+      SEVERITIES.INFO,
+      ICONS.EXC_INFO,
       () => {
       this.store.dispatch(new WorkerActions.Restore(item.id))
       .pipe(takeUntil(this.destroy$))
@@ -103,8 +103,8 @@ export class TrashedComponent implements OnInit {
       TITLES.CONFIRM_RESTORE_ALL,
       MESSAGES.MESSAGE_RESTORE_ALL,
       ACTIONS.RESTORE,
-      SEVERITIES.PRIMARY,
-      ICONS.EXC_PRIMARY,
+      SEVERITIES.INFO,
+      ICONS.EXC_INFO,
       () => {
         this.selectedItems$.pipe(take(1)).subscribe((data) => {
           this.store.dispatch(new WorkerActions.RestoreAll(data))

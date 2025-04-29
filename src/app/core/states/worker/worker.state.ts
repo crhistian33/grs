@@ -4,8 +4,9 @@ import { Worker, WorkerResquest, WorkerStateModel, INITIAL_VALUES } from '@model
 import { BaseState } from '@shared/states/state-base/state-base.state';
 import { WorkerService } from '@services/masters/worker.service';
 import { WorkerActions } from '@states/worker/worker.actions';
+import { SetLoading } from '@shared/states/loading/loading.actions';
 import { tap } from 'rxjs';
-import { ApiResCollection } from '@shared/models/bases/response.model';
+import { ApiResSingle } from '@shared/models/bases/response.model';
 
 @State<WorkerStateModel>({
   name: 'worker',
@@ -32,11 +33,6 @@ export class WorkerState extends BaseState<Worker, WorkerResquest> {
   @Selector()
   static getItemsTrashed(state: WorkerStateModel) {
     return state.filterTrashEntities;
-  }
-
-  @Selector()
-  static getItemsCeased(state: WorkerStateModel) {
-    return state.filterCeasedEntities;
   }
 
   @Selector()
@@ -85,24 +81,6 @@ export class WorkerState extends BaseState<Worker, WorkerResquest> {
     return state.trashEntities.some((entity) => entity.selected);
   }
 
-  @Selector()
-  static getCeasedSelectedItems(state: WorkerStateModel) {
-    return state.ceasedEntities?.filter((entity) => entity.selected);
-  }
-
-  @Selector()
-  static areCeasedAllSelected(state: WorkerStateModel) {
-    return (
-      state.ceasedEntities && state.ceasedEntities.length > 0 &&
-      state.ceasedEntities.every((entity) => entity.selected)
-    );
-  }
-
-  @Selector()
-  static hasCeasedSelectedItems(state: WorkerStateModel) {
-    return state.ceasedEntities?.some((entity) => entity.selected);
-  }
-
   // Acciones
   @Action(WorkerActions.GetAll)
   getAll(ctx: StateContext<WorkerStateModel>) {
@@ -112,27 +90,6 @@ export class WorkerState extends BaseState<Worker, WorkerResquest> {
   @Action(WorkerActions.GetAllTrash)
   getAllTrash(ctx: StateContext<WorkerStateModel>) {
     return super.getAllTrashBase(ctx);
-  }
-
-  @Action(WorkerActions.GetAllCeased)
-  getAllCeased(ctx: StateContext<WorkerStateModel>) {
-    ctx.patchState({ loading: true });
-    return this.workerService.getCeased().pipe(
-      tap({
-        next: (response: ApiResCollection<Worker>) => {
-          ctx.patchState({
-            entities: response.data,
-            filterEntities: response.data
-          })
-        },
-        error: () => {
-          ctx.patchState({ loading: false });
-        },
-        finalize: () => {
-          ctx.patchState({ loading: false });
-        }
-      })
-    );
   }
 
   @Action(WorkerActions.GetOne)
@@ -148,6 +105,35 @@ export class WorkerState extends BaseState<Worker, WorkerResquest> {
   @Action(WorkerActions.Update)
   update(ctx: StateContext<WorkerStateModel>, { payload, id }: WorkerActions.Update) {
     return super.updateBase(ctx, payload, id, WorkerActions.Update.type);
+  }
+
+  @Action(WorkerActions.Renew)
+  renew(ctx: StateContext<WorkerStateModel>, { payload, id }: WorkerActions.Renew) {
+    const type = WorkerActions.Renew.type;
+    ctx.dispatch(new SetLoading(type, true));
+    const state = ctx.getState();
+
+    return this.workerService.renew(id, payload)
+    .pipe(
+      tap({
+        next: (response: ApiResSingle<Worker>) => {
+          const updatedEntities = state.entities.map(entity =>
+            entity.id === Number(id) ? { ...entity, ...response.data } : entity
+          );
+          ctx.patchState({
+            entities: updatedEntities,
+            filterEntities: updatedEntities,
+            result: { title: response.title, message: response.message },
+          });
+        },
+        error: () => {
+          ctx.dispatch(new SetLoading(type, false));
+        },
+        finalize: () => {
+          ctx.dispatch(new SetLoading(type, false));
+        }
+      })
+    )
   }
 
   @Action(WorkerActions.Delete)

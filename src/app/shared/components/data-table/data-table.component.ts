@@ -7,10 +7,11 @@ import { Tooltip } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
 import { FormatDataPipe } from '@shared/pipes/format-data.pipe';
 import { TYPES } from '@shared/utils/constants';
+import { IconFieldModule } from 'primeng/iconfield';
 
 @Component({
   selector: 'app-data-table',
-  imports: [CommonModule, TableModule, ButtonModule, CheckboxModule, Tooltip, SkeletonModule, FormatDataPipe],
+  imports: [CommonModule, TableModule, ButtonModule, CheckboxModule, Tooltip, SkeletonModule, FormatDataPipe, IconFieldModule],
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

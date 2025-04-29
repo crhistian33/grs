@@ -97,6 +97,7 @@ export abstract class BaseState<T extends BaseModel, R>  {
   protected updateBase(ctx: StateContext<BaseStateModel<T>>, payload: Partial<R>, id: number, type: string) {
     ctx.dispatch(new SetLoading(type, true));
     const state = ctx.getState();
+
     return this.service.update(id, payload)
     .pipe(
       tap({

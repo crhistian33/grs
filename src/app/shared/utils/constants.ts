@@ -45,12 +45,18 @@ export const ACTIONS = {
 
 export const SEVERITIES = {
   DANGER: 'danger',
-  PRIMARY: 'primary'
+  PRIMARY: 'primary',
+  SUCCESS: 'success',
+  INFO: 'info',
+  WARNING: 'warning',
 }
 
 export const ICONS = {
   EXC_DANGER: 'pi pi-exclamation-circle text-red-500',
-  EXC_PRIMARY: 'pi pi-exclamation-circle text-primary',
+  EXC_PRIMARY: 'pi pi-exclamation-circle text-green-500',
+  EXC_SUCCESS: 'pi pi-exclamation-circle text-success',
+  EXC_INFO: 'pi pi-exclamation-circle text-cyan-600',
+  EXC_WARNING: 'pi pi-exclamation-circle text-warning',
 }
 
 export const IDS = {

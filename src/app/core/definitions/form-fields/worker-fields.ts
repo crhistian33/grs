@@ -11,15 +11,6 @@ export const WORKER_FORM_FIELDS: IFormField[] = [
     ],
   },
   {
-    type: 'select',
-    key: 'type_worker_id',
-    label: 'Tipo de trabajador',
-    cols: 1,
-    validators: [
-      { name: 'required', value: 'required', message: 'El tipo de trabajador es requerido' },
-    ],
-  },
-  {
     type: 'text',
     key: 'name',
     label: 'Nombre',
@@ -56,5 +47,39 @@ export const WORKER_FORM_FIELDS: IFormField[] = [
     validators: [
       { name: 'required', value: 'required', message: 'La cuenta bancaria es requerida.' },
     ],
+  },
+  {
+    type: 'group',
+    key: 'contract',
+    label: 'Contrato',
+    options: [
+      {
+        type: 'select',
+        key: 'type_worker_id',
+        label: 'Tipo de trabajador',
+        cols: 1,
+        validators: [
+          { name: 'required', value: 'required', message: 'El tipo de trabajador es requerido.' },
+        ],
+      },
+      {
+        type: 'date',
+        key: 'start_date',
+        label: 'Fecha de inicio',
+        cols: 1,
+        validators: [
+          { name: 'required', value: 'required', message: 'La fecha de inicio es requerida.' },
+        ],
+      },
+      {
+        type: 'date',
+        key: 'end_date',
+        label: 'Fecha de cese',
+        cols: 1,
+        validators: [
+          { name: 'required', value: 'required', message: 'La fecha de cese es requerida.' },
+        ],
+      },
+    ]
   },
 ];

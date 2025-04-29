@@ -21,11 +21,11 @@ import { LayoutAction } from '@shared/states/layout/layout.actions';
 import { CompanyActions } from '@states/company/company.actions';
 import { TypeWorkerActions } from '@states/typeworker/typeworker.actions';
 import { APP_FILTERS } from 'src/app/core/definitions/filters';
-import { RouterLink } from '@angular/router';
+import { RenewComponent } from '../renew/renew.component';
 
 @Component({
   selector: 'app-list',
-  imports: [CommonModule, RouterLink, HeaderContentComponent, DataTableComponent, ConfirmDialog, ButtonModule, FilterComponent],
+  imports: [CommonModule, HeaderContentComponent, DataTableComponent, ConfirmDialog, ButtonModule, FilterComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
 })
@@ -73,7 +73,12 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   onUpdate(item: any) {
+    console.log(item);
     this.modalService.onModalForm(FormComponent, TITLES.UPDATE, item);
+  }
+
+  onRenew(item: any) {
+    this.modalService.onModalForm(RenewComponent, TITLES.RENEW, item);
   }
 
   onDelete(item: any) {

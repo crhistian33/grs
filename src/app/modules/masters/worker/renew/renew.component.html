@@ -1,16 +1,30 @@
-<h1>{{ worker.name }}</h1>
-<form>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex md:justify-between">
+  <div class="flex items-center divide-x divide-gray-300">
+    <span class="font-semibold md:text-xl text-cyan-800 pe-2">{{ worker.name }}</span>
+    <span class="ps-2">DNI: {{ worker.dni }}</span>
+  </div>
+  <span class="font-semibold md:text-xl text-cyan-800">{{ worker.typeworker.name }}</span>
+</div>
+<hr class="border-gray-300 my-3" />
+<form [formGroup]="myForm" (submit)="onSubmit()">
+  <h2 class="font-semibold mb-3">Datos del nuevo contrato</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-2" formGroupName="contract">
     <div class="col-span-1">
       <p-iftalabel>
-        <p-datepicker inputId="date" [appendTo]="'body'" showIcon iconDisplay="input" dateFormat="dd/mm/yy"  styleClass="w-full" />
+        <p-datepicker inputId="date" formControlName="start_date" [appendTo]="'body'" showIcon iconDisplay="input" dateFormat="dd/mm/yy" [ngClass]="{'ng-invalid ng-dirty': isInvalid('start_date')}" styleClass="w-full" />
         <label for="date">Fecha de inicio de contrato</label>
       </p-iftalabel>
     </div>
     <div class="col-span-1">
       <p-iftalabel>
-        <p-datepicker inputId="date" [appendTo]="'body'" showIcon iconDisplay="input" dateFormat="dd/mm/yy"  styleClass="w-full" />
+        <p-datepicker inputId="date" formControlName="end_date" [appendTo]="'body'" showIcon iconDisplay="input" dateFormat="dd/mm/yy" [ngClass]="{'ng-invalid ng-dirty': isInvalid('end_date')}"  styleClass="w-full" />
         <label for="date">Fecha de cese de contrato</label>
+      </p-iftalabel>
+    </div>
+    <div class="col-span-1">
+      <p-iftalabel>
+        <p-select inputId="typeworker" formControlName="type_worker_id" [options]="(typeworkers$ | async) || []" optionLabel="name" optionValue="id" [appendTo]="'body'" [showClear]="true" [ngClass]="{'ng-invalid ng-dirty': isInvalid('type_worker_id')}" styleClass="w-full" />
+        <label for="typeworker">Seleccione el tipo de trabajador</label>
       </p-iftalabel>
     </div>
 
@@ -21,6 +35,7 @@
         type="button"
         styleClass="border-indigo-100 bg-indigo-100 hover:bg-indigo-200 text-gray-800"
         size="small"
+        (onClick)="onCancel()"
       ></p-button>
       <p-button
         type="submit"

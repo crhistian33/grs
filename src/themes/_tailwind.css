@@ -2,6 +2,12 @@
 @import "primeicons/primeicons.css";
 @import "tailwindcss";
 
+@layer base {
+  body {
+    font-size: 14px;
+  }
+}
+
 @layer components {
   .p-tooltip-arrow {
     display: none;
