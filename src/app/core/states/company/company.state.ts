@@ -4,6 +4,7 @@ import { BaseState } from '@shared/states/state-base/state-base.state';
 import { Company, CompanyResquest, CompanyStateModel, INITIAL_VALUES } from '@models/masters/company.model';
 import { CompanyService } from '@services/masters/company.service';
 import { CompanyActions } from './company.actions';
+import { Sort } from '@shared/models/ui/sort.model';
 
 @State<CompanyStateModel>({
   name: 'company',
@@ -14,6 +15,14 @@ import { CompanyActions } from './company.actions';
 export class CompanyState extends BaseState<Company, CompanyResquest> {
   constructor(private companyService: CompanyService) {
     super(companyService);
+  }
+
+  protected getSortField(): Sort<Company> {
+    return {
+      field: 'name',
+      type: 'string',
+      direction: true
+    };
   }
 
   // Selectores

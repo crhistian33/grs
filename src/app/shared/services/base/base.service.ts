@@ -35,31 +35,11 @@ export abstract class BaseService<T extends BaseModel, R> {
   }
 
   create(resource: R): Observable<ApiResSingle<T>> {
-    //Usando el userID del usuario autenticado
-    // const userID = this.store.selectSnapshot(UserState.getCurrentUserID);
-    // const newResources = {
-    //   ...resource,
-    //   created_by: userID
-    // };
-    const newResources = {
-      ...resource,
-      created_by: 1
-    };
-    return this.http.post<ApiResSingle<T>>(`${this.apiUrl}/${this.endpoint}`, newResources, { context: checkToken() });
+    return this.http.post<ApiResSingle<T>>(`${this.apiUrl}/${this.endpoint}`, resource, { context: checkToken() });
   }
 
   update(id: number, resource: Partial<R>): Observable<ApiResSingle<T>> {
-    //Usando el userID del usuario autenticado
-    // const userID = this.store.selectSnapshot(UserState.getCurrentUserID);
-    // const newResources = {
-    //   ...resource,
-    //   updated_by: userID
-    // };
-    const newResources = {
-      ...resource,
-      updated_by: 1
-    };
-    return this.http.patch<ApiResSingle<T>>(`${this.apiUrl}/${this.endpoint}/${id}`, newResources, { context: checkToken() });
+    return this.http.patch<ApiResSingle<T>>(`${this.apiUrl}/${this.endpoint}/${id}`, resource, { context: checkToken() });
   }
 
   delete(id: number): Observable<ApiResSingle<T>> {
@@ -74,16 +54,16 @@ export abstract class BaseService<T extends BaseModel, R> {
     return this.http.get<ApiResSingle<T>>(`${this.apiUrl}/${this.endpoint}/restore/${id}`, { context: checkToken() });
   }
 
-  deleteAll(resources: T[]): Observable<ApiResSingle<T>> {
-    return this.http.post<ApiResSingle<T>>(`${this.apiUrl}/${this.endpoint}/destroyes`, { resources }, { context: checkToken() });
+  deleteAll(resources: T[]): Observable<ApiResCollection<T>> {
+    return this.http.post<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/destroyes`, { resources }, { context: checkToken() });
   }
 
   deleteForceAll(resources: T[]): Observable<ApiResSingle<T>> {
     return this.http.post<ApiResSingle<T>>(`${this.apiUrl}/${this.endpoint}/destroyesforce`, { resources }, { context: checkToken() });
   }
 
-  restoreAll(resources: T[]): Observable<ApiResSingle<T>> {
-    return this.http.post<ApiResSingle<T>>(`${this.apiUrl}/${this.endpoint}/restores`, { resources }, { context: checkToken() });
+  restoreAll(resources: T[]): Observable<ApiResCollection<T>> {
+    return this.http.post<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/restores`, { resources }, { context: checkToken() });
   }
 
   // protected abstract getMockItems(): T[];

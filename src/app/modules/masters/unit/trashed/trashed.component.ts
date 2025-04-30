@@ -22,6 +22,7 @@ import { CompanyActions } from '@states/company/company.actions';
 import { CustomerActions } from '@states/customer/customer.actions';
 import { CenterActions } from '@states/center/center.actions';
 import { ShiftActions } from '@states/shift/shift.actions';
+import { ActionService } from '@shared/services/ui/action.service';
 
 @Component({
   selector: 'app-trashed',
@@ -33,6 +34,7 @@ export class TrashedComponent implements OnInit {
   private store = inject(Store);
   private modalService = inject(ModalService);
   private toastService = inject(ToastService);
+  private actionService = inject(ActionService);
   private destroy$ = new Subject<void>();
 
   title: string = TITLES.RECYCLE;
@@ -47,7 +49,7 @@ export class TrashedComponent implements OnInit {
   loading$: Observable<boolean> = this.store.select(UnitState.getLoading);
 
   ngOnInit(): void {
-    this.store.dispatch([
+    this.actionService.execActions([
       new LayoutAction.SetTitle(TITLES.UNITS),
       new UnitActions.GetAllTrash(),
       new CompanyActions.GetOptions(),
@@ -60,10 +62,7 @@ export class TrashedComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.store.dispatch([
-      new LayoutAction.ClearTitle(),
-      new UnitActions.ClearAll()
-    ]);
+    this.store.dispatch(new LayoutAction.ClearTitle());
   }
 
   onRestore(item: any) {
@@ -71,8 +70,8 @@ export class TrashedComponent implements OnInit {
       TITLES.CONFIRM_RESTORE,
       MESSAGES.MESSAGE_RESTORE,
       ACTIONS.RESTORE,
-      SEVERITIES.PRIMARY,
-      ICONS.EXC_PRIMARY,
+      SEVERITIES.INFO,
+      ICONS.EXC_INFO,
       () => {
       this.store.dispatch(new UnitActions.Restore(item.id))
       .pipe(takeUntil(this.destroy$))
@@ -105,8 +104,8 @@ export class TrashedComponent implements OnInit {
       TITLES.CONFIRM_RESTORE_ALL,
       MESSAGES.MESSAGE_RESTORE_ALL,
       ACTIONS.RESTORE,
-      SEVERITIES.PRIMARY,
-      ICONS.EXC_PRIMARY,
+      SEVERITIES.INFO,
+      ICONS.EXC_INFO,
       () => {
         this.selectedItems$.pipe(take(1)).subscribe((data) => {
           this.store.dispatch(new UnitActions.RestoreAll(data))

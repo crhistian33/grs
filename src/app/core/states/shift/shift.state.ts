@@ -4,6 +4,7 @@ import { Shift, ShiftResquest, ShiftStateModel, INITIAL_VALUES } from '@models/m
 import { BaseState } from '@shared/states/state-base/state-base.state';
 import { ShiftService } from '@services/masters/shift.service';
 import { ShiftActions } from '@states/shift/shift.actions';
+import { Sort } from '@shared/models/ui/sort.model';
 
 @State<ShiftStateModel>({
   name: 'shift',
@@ -14,6 +15,14 @@ import { ShiftActions } from '@states/shift/shift.actions';
 export class ShiftState extends BaseState<Shift, ShiftResquest> {
   constructor(private shiftService: ShiftService) {
     super(shiftService);
+  }
+
+  protected getSortField(): Sort<Shift> {
+    return {
+      field: 'name',
+      type: 'string',
+      direction: true
+    };
   }
 
   // Selectores

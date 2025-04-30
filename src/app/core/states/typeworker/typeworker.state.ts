@@ -4,6 +4,7 @@ import { TypeWorker, TypeWorkerResquest, TypeWorkerStateModel, INITIAL_VALUES } 
 import { BaseState } from '@shared/states/state-base/state-base.state';
 import { TypeWorkerService } from '@services/masters/typeworker.service';
 import { TypeWorkerActions } from '@states/typeworker/typeworker.actions';
+import { Sort } from '@shared/models/ui/sort.model';
 
 @State<TypeWorkerStateModel>({
   name: 'typeWorker',
@@ -14,6 +15,14 @@ import { TypeWorkerActions } from '@states/typeworker/typeworker.actions';
 export class TypeWorkerState extends BaseState<TypeWorker, TypeWorkerResquest> {
   constructor(private typeWorkerService: TypeWorkerService) {
     super(typeWorkerService);
+  }
+
+  protected getSortField(): Sort<TypeWorker> {
+    return {
+      field: 'name',
+      type: 'string',
+      direction: true
+    };
   }
 
   // Selectores

@@ -43,19 +43,14 @@ export class TrashedComponent implements OnInit {
   loading$: Observable<boolean> = this.store.select(TypeWorkerState.getLoading);
 
   ngOnInit(): void {
-    this.store.dispatch([
-      new LayoutAction.SetTitle(TITLES.TYPEWORKERS),
-      new TypeWorkerActions.GetAllTrash()
-    ]);
+    this.store.dispatch(new LayoutAction.SetTitle(TITLES.TYPEWORKERS))
+    this.store.dispatch(new TypeWorkerActions.GetAllTrash());
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.store.dispatch([
-      new LayoutAction.ClearTitle(),
-      new TypeWorkerActions.ClearAll()
-    ]);
+    this.store.dispatch(new LayoutAction.ClearTitle());
   }
 
   onRestore(item: any) {
@@ -63,8 +58,8 @@ export class TrashedComponent implements OnInit {
       TITLES.CONFIRM_RESTORE,
       MESSAGES.MESSAGE_RESTORE,
       ACTIONS.RESTORE,
-      SEVERITIES.PRIMARY,
-      ICONS.EXC_PRIMARY,
+      SEVERITIES.INFO,
+      ICONS.EXC_INFO,
       () => {
       this.store.dispatch(new TypeWorkerActions.Restore(item.id))
       .pipe(takeUntil(this.destroy$))
@@ -97,8 +92,8 @@ export class TrashedComponent implements OnInit {
       TITLES.CONFIRM_RESTORE_ALL,
       MESSAGES.MESSAGE_RESTORE_ALL,
       ACTIONS.RESTORE,
-      SEVERITIES.PRIMARY,
-      ICONS.EXC_PRIMARY,
+      SEVERITIES.INFO,
+      ICONS.EXC_INFO,
       () => {
         this.selectedItems$.pipe(take(1)).subscribe((data) => {
           this.store.dispatch(new TypeWorkerActions.RestoreAll(data))

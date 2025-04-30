@@ -4,6 +4,7 @@ import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { CategoryService } from '@services/masters/category.service';
 import { BaseState } from '@shared/states/state-base/state-base.state';
 import { CategoryActions } from './category.actions';
+import { Sort } from '@shared/models/ui/sort.model';
 
 @State<CategoryStateModel>({
   name: 'category',
@@ -13,6 +14,14 @@ import { CategoryActions } from './category.actions';
 export class CategoryState extends BaseState<Category, CategoryRequest> {
   constructor(private categoryService: CategoryService) {
     super(categoryService);
+  }
+
+  protected getSortField(): Sort<Category> {
+    return {
+      field: 'name',
+      type: 'string',
+      direction: true
+    };
   }
 
   @Selector()

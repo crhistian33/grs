@@ -4,6 +4,7 @@ import { Unit, UnitResquest, UnitStateModel, INITIAL_VALUES } from '@models/mast
 import { BaseState } from '@shared/states/state-base/state-base.state';
 import { UnitService } from '@services/masters/unit.service';
 import { UnitActions } from '@states/unit/unit.actions';
+import { Sort } from '@shared/models/ui/sort.model';
 
 @State<UnitStateModel>({
   name: 'unit',
@@ -14,6 +15,14 @@ import { UnitActions } from '@states/unit/unit.actions';
 export class UnitState extends BaseState<Unit, UnitResquest> {
   constructor(private unitService: UnitService) {
     super(unitService);
+  }
+
+  protected getSortField(): Sort<Unit> {
+    return {
+      field: 'name',
+      type: 'string',
+      direction: true
+    };
   }
 
   // Selectores

@@ -46,19 +46,14 @@ export class ListComponent implements OnInit, OnDestroy {
   trashes$: Observable<number> = this.store.select(TypeWorkerState.getTrashes);
 
   ngOnInit(): void {
-    this.store.dispatch([
-      new LayoutAction.SetTitle(TITLES.TYPEWORKERS),
-      new TypeWorkerActions.GetAll()
-    ]);
+    this.store.dispatch(new LayoutAction.SetTitle(TITLES.TYPEWORKERS));
+    this.store.dispatch(new TypeWorkerActions.GetAll());
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.store.dispatch([
-      new LayoutAction.ClearTitle(),
-      new TypeWorkerActions.ClearAll()
-    ]);
+    this.store.dispatch(new LayoutAction.ClearTitle());
   }
 
   onCreate() {
@@ -80,7 +75,7 @@ export class ListComponent implements OnInit, OnDestroy {
         this.store.dispatch(new TypeWorkerActions.Delete(item.id))
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
-          const result = response.Typeworker.result;
+          const result = response.typeWorker.result;
           this.toastService.notification(result.title, result.message, 'success', 4000);
         });
       }
@@ -99,7 +94,7 @@ export class ListComponent implements OnInit, OnDestroy {
           this.store.dispatch(new TypeWorkerActions.DeleteAll(data))
           .pipe(takeUntil(this.destroy$))
           .subscribe((response: any) => {
-            const result = response.Typeworker.result;
+            const result = response.typeWorker.result;
             this.toastService.notification(result.title, result.message, 'success', 4000);
           });
         });

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BaseModel } from '@shared/models/bases/base.model';
 import { StateContext } from '@ngxs/store';
 import { BaseService } from '@shared/services/base/base.service';
@@ -8,47 +8,67 @@ import { ApiResCollection, ApiResSingle } from '@shared/models/bases/response.mo
 import { SetLoading } from '@shared/states/loading/loading.actions';
 import { TYPES } from '@shared/utils/constants';
 import { FilterStateModel } from '@shared/models/ui/filter.model';
+import { SortService } from '@shared/services/ui/sort.service';
+import { Sort } from '@shared/models/ui/sort.model';
 
 @Injectable()
 export abstract class BaseState<T extends BaseModel, R>  {
+  private sortService = inject(SortService);
+
   constructor(protected service: BaseService<T, R>) {}
 
+  protected abstract getSortField(): Sort<T>;
+
   protected getAllBase(ctx: StateContext<BaseStateModel<T>>) {
+    if(ctx.getState().loaded) return;
+
     ctx.patchState({ loading: true });
     return this.service.getAll().pipe(
       tap({
         next: (response: ApiResCollection<T>) => {
+          const sortField = this.getSortField();
+          const sortedData = sortField
+            ? this.sortService.sortByDateField(response.data, sortField)
+            : response.data;
+
           ctx.patchState({
-            entities: response.data,
-            filterEntities: response.data,
+            entities: sortedData,
+            filterEntities: sortedData,
             trashes: response.trashes,
           })
         },
         error: () => {
-          ctx.patchState({ loading: false });
+          ctx.patchState({ loading: false, loaded: false });
         },
         finalize: () => {
-          ctx.patchState({ loading: false });
+          ctx.patchState({ loading: false, loaded: true });
         }
       })
     );
   }
 
   protected getAllTrashBase(ctx: StateContext<BaseStateModel<T>>) {
+    if(ctx.getState().loadedTrash) return;
+
     ctx.patchState({ loading: true });
     return this.service.getAllTrash().pipe(
       tap({
         next: (response: ApiResCollection<T>) => {
+          const sortField = this.getSortField();
+          const sortedData = sortField
+            ? this.sortService.sortByDateField(response.data, sortField)
+            : response.data;
+
           ctx.patchState({
-            trashEntities: response.data,
-            filterTrashEntities: response.data
+            trashEntities: sortedData,
+            filterTrashEntities: sortedData
           })
         },
         error: () => {
-          ctx.patchState({ loading: false });
+          ctx.patchState({ loading: false, loadedTrash: false });
         },
         finalize: () => {
-          ctx.patchState({ loading: false });
+          ctx.patchState({ loading: false, loadedTrash: true });
         }
       })
     );
@@ -59,8 +79,13 @@ export abstract class BaseState<T extends BaseModel, R>  {
     return this.service.getOptions().pipe(
       tap({
         next: (response: ApiResCollection<T>) => {
+          const sortField = this.getSortField();
+          const sortedData = sortField
+            ? this.sortService.sortByDateField(response.data, sortField)
+            : response.data;
+
           ctx.patchState({
-            options: response.data
+            options: sortedData
           })
         },
         error: () => {
@@ -94,12 +119,24 @@ export abstract class BaseState<T extends BaseModel, R>  {
 
   protected createBase(ctx: StateContext<BaseStateModel<T>>, payload: R, type: string) {
     ctx.dispatch(new SetLoading(type, true));
+    const state = ctx.getState();
     return this.service.create(payload).pipe(
       tap({
         next: (response: ApiResSingle<T>) => {
+          const sortField = this.getSortField();
+          const data = [...state.entities, ...[response.data]];
+          const dataFilter = [...state.filterEntities, ...[response.data]];
+
+          const sortedData = sortField
+            ? this.sortService.sortByDateField(data, sortField)
+            : data;
+          const sortedDataFilter = sortField
+            ? this.sortService.sortByDateField(dataFilter, sortField)
+            : dataFilter;
+
           ctx.patchState({
-            entities: [...ctx.getState().entities, response.data],
-            filterEntities: [...ctx.getState().filterEntities, response.data],
+            entities: sortedData,
+            filterEntities: sortedDataFilter,
             result: { title: response.title, message: response.message },
           })
         },
@@ -121,15 +158,24 @@ export abstract class BaseState<T extends BaseModel, R>  {
     .pipe(
       tap({
         next: (response: ApiResSingle<T>) => {
+          const sortField = this.getSortField();
           const updatedEntities = state.entities.map(entity =>
             entity.id === Number(id) ? { ...entity, ...response.data } : entity
           );
           const updatedFilterEntities = state.filterEntities.map(entity =>
             entity.id === Number(id) ? { ...entity, ...response.data } : entity
           );
+
+          const sortedData = sortField
+            ? this.sortService.sortByDateField(updatedEntities, sortField)
+            : updatedEntities;
+          const sortedDataFilter = sortField
+            ? this.sortService.sortByDateField(updatedFilterEntities, sortField)
+            : updatedFilterEntities;
+
           ctx.patchState({
-            entities: updatedEntities,
-            filterEntities: [...updatedFilterEntities],
+            entities: sortedData,
+            filterEntities: [...sortedDataFilter],
             result: { title: response.title, message: response.message },
           });
         },
@@ -154,7 +200,9 @@ export abstract class BaseState<T extends BaseModel, R>  {
         next: (response: ApiResSingle<T>) => {
           ctx.patchState({
             entities,
-            filterEntities: [...filterEntities],
+            filterEntities,
+            trashEntities: [...state.trashEntities, ...[response.data]],
+            filterTrashEntities: [...state.filterTrashEntities, ...[response.data]],
             result: { title: response.title, message: response.message },
             trashes: response.trashes,
           })
@@ -194,14 +242,16 @@ export abstract class BaseState<T extends BaseModel, R>  {
     const state = ctx.getState();
     return this.service.deleteAll(payload).pipe(
       tap({
-        next: (response: ApiResSingle<T>) => {
-          const deletedIds = Object.values(response.data);
-          const currentEntities = state.entities;
-          const entities = currentEntities.filter(item => !deletedIds.includes(item.id))
+        next: (response: ApiResCollection<T>) => {
+          const deletedIds = Object.values(response.data).map(item => item.id);
+          const entities = state.entities.filter(item => !deletedIds.includes(item.id))
+          const filterEntities = state.filterEntities.filter(item => !deletedIds.includes(item.id))
 
           ctx.patchState({
             entities,
-            filterEntities: entities,
+            filterEntities,
+            trashEntities: [...state.trashEntities, ...response.data],
+            filterTrashEntities: [...state.filterTrashEntities, ...response.data],
             result: { title: response.title, message: response.message },
             trashes: response.trashes,
           })
@@ -244,11 +294,33 @@ export abstract class BaseState<T extends BaseModel, R>  {
     return this.service.restore(id).pipe(
       tap({
         next: (response: ApiResSingle<T>) => {
-          const entities = state.trashEntities.filter(item => item.id !== id);
+          const sortField = this.getSortField();
+          const data = [...state.entities, ...[response.data]];
+          const dataFilter = [...state.filterEntities, ...[response.data]];
+          const trashEntities = state.trashEntities.filter(item => item.id !== id);
+          const filterTrashEntities = state.filterTrashEntities.filter(item => item.id !== id);
+
+          const sortedData = sortField
+            ? this.sortService.sortByDateField(data, sortField)
+            : data;
+          const sortedDataFilter = sortField
+            ? this.sortService.sortByDateField(dataFilter, sortField)
+            : dataFilter;
+          const sortedDataTrashed = sortField
+            ? this.sortService.sortByDateField(trashEntities, sortField)
+            : trashEntities;
+          const sortedDataFilterTrashed = sortField
+            ? this.sortService.sortByDateField(filterTrashEntities, sortField)
+            : filterTrashEntities;
+
+
           ctx.patchState({
-            trashEntities: entities,
-            filterTrashEntities: entities,
+            entities: sortedData,
+            filterEntities: sortedDataFilter,
+            trashEntities: sortedDataTrashed,
+            filterTrashEntities: sortedDataFilterTrashed,
             result: { title: response.title, message: response.message },
+            trashes: trashEntities.length,
           });
         },
         error: () => {
@@ -264,16 +336,36 @@ export abstract class BaseState<T extends BaseModel, R>  {
   protected restoreAllBase(ctx: StateContext<BaseStateModel<T>>, payload: T[], type: string) {
     ctx.dispatch(new SetLoading(type, true));
     const state = ctx.getState();
-    const entities = state.trashEntities.filter(item =>
-      !payload.some(element => element.id === item.id)
-    );
+
     return this.service.restoreAll(payload).pipe(
       tap({
-        next: (response: ApiResSingle<T>) => {
+        next: (response: ApiResCollection<T>) => {
+          const sortField = this.getSortField();
+          const data = [...state.entities, ...response.data];
+          const dataFilter = [...state.filterEntities, ...response.data];
+          const trashEntities = state.trashEntities.filter(item => !payload.some(element => element.id === item.id));
+          const filterTrashEntities = state.filterTrashEntities.filter(item => !payload.some(element => element.id === item.id));
+
+          const sortedData = sortField
+            ? this.sortService.sortByDateField(data, sortField)
+            : data;
+          const sortedDataFilter = sortField
+            ? this.sortService.sortByDateField(dataFilter, sortField)
+            : dataFilter;
+          const sortedDataTrashed = sortField
+            ? this.sortService.sortByDateField(trashEntities, sortField)
+            : trashEntities;
+          const sortedDataFilterTrashed = sortField
+            ? this.sortService.sortByDateField(filterTrashEntities, sortField)
+            : filterTrashEntities;
+
           ctx.patchState({
-            trashEntities: entities,
-            filterTrashEntities: entities,
+            entities: sortedData,
+            filterEntities: sortedDataFilter,
+            trashEntities: sortedDataTrashed,
+            filterTrashEntities: sortedDataFilterTrashed,
             result: { title: response.title, message: response.message },
+            trashes: trashEntities.length,
           });
         },
         error: () => {

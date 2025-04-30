@@ -20,6 +20,7 @@ import { FilterStateModel } from '@shared/models/ui/filter.model';
 import { APP_FILTERS } from 'src/app/core/definitions/filters';
 import { CompanyActions } from '@states/company/company.actions';
 import { TypeWorkerActions } from '@states/typeworker/typeworker.actions';
+import { ActionService } from '@shared/services/ui/action.service';
 
 @Component({
   selector: 'app-trashed',
@@ -31,6 +32,7 @@ export class TrashedComponent implements OnInit {
   private store = inject(Store);
   private modalService = inject(ModalService);
   private toastService = inject(ToastService);
+  private actionService = inject(ActionService);
   private destroy$ = new Subject<void>();
 
   title: string = TITLES.RECYCLE;
@@ -45,7 +47,7 @@ export class TrashedComponent implements OnInit {
   loading$: Observable<boolean> = this.store.select(WorkerState.getLoading);
 
   ngOnInit(): void {
-    this.store.dispatch([
+    this.actionService.execActions([
       new LayoutAction.SetTitle(TITLES.WORKERS),
       new WorkerActions.GetAllTrash(),
       new CompanyActions.GetOptions(),
@@ -56,10 +58,7 @@ export class TrashedComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.store.dispatch([
-      new LayoutAction.ClearTitle,
-      new WorkerActions.ClearAll()
-    ]);
+    this.store.dispatch(new LayoutAction.ClearTitle());
   }
 
   onRestore(item: any) {

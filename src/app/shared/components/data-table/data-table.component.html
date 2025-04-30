@@ -50,52 +50,54 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-      <tr class="cursor-pointer" (click)="onToggleItem(item.id)">
-        <td class="px-3 py-2 whitespace-nowrap">
-          <p-tableCheckbox [value]="item"></p-tableCheckbox>
-        </td>
-        <td pFrozenColumn [style]="{textAlign: 'center'}">{{ rowIndex + 1 }}</td>
-        @for (header of headers; track $index) {
-          <td>
-            @if(header.key === 'state') {
-              <div class="flex items-center">
-                @if(item[header.key] === 'Activo') {
-                  <span class="text-green-500">
-                    <i class="pi pi-circle-fill text-[.75rem]"></i>
-                    {{ item[header.key] }}
-                  </span>
-                } @else {
-                  <span class="text-red-600">
-                    <i class="pi pi-circle-fill text-[.75rem]"></i>
-                    {{ item[header.key] }}
-                  </span>
-                }
-              </div>
-            } @else {
-              {{ item[header.key] | formatData:header.type }}
-            }
+      @if (!loading) {
+        <tr class="cursor-pointer" (click)="onToggleItem(item.id)">
+          <td class="px-3 py-2 whitespace-nowrap">
+            <p-tableCheckbox [value]="item"></p-tableCheckbox>
           </td>
-        }
-        <td>
-          <div class="flex justify-end gap-2">
-            @if(typePage === types.LIST) {
-              @for (header of headers; track $index) {
-                @if(header.key === 'state' && item[header.key] !== 'Activo') {
-                  <p-button icon="pi pi-file-edit" size="small" pTooltip="Renovar" tooltipPosition="bottom" styleClass="bg-cyan-600 border-cyan-600 hover:bg-cyan-700 text-white w-8" (onClick)="onRenew(item); $event.stopPropagation()"></p-button>
+          <td pFrozenColumn [style]="{textAlign: 'center'}">{{ rowIndex + 1 }}</td>
+          @for (header of headers; track $index) {
+            <td>
+              @if(header.key === 'state') {
+                <div class="flex items-center">
+                  @if(item[header.key] === 'Activo') {
+                    <span class="text-green-500">
+                      <i class="pi pi-circle-fill text-[.75rem]"></i>
+                      {{ item[header.key] }}
+                    </span>
+                  } @else {
+                    <span class="text-red-600">
+                      <i class="pi pi-circle-fill text-[.75rem]"></i>
+                      {{ item[header.key] }}
+                    </span>
+                  }
+                </div>
+              } @else {
+                {{ item[header.key] | formatData:header.type }}
+              }
+            </td>
+          }
+          <td>
+            <div class="flex justify-end gap-2">
+              @if(typePage === types.LIST) {
+                @for (header of headers; track $index) {
+                  @if(header.key === 'state' && item[header.key] !== 'Activo') {
+                    <p-button icon="pi pi-file-edit" size="small" pTooltip="Renovar" tooltipPosition="bottom" styleClass="bg-cyan-600 border-cyan-600 hover:bg-cyan-700 text-white w-8" (onClick)="onRenew(item); $event.stopPropagation()"></p-button>
+                  }
                 }
               }
-            }
-            @if(typePage === types.RECYCLE) {
-              <p-button icon="pi pi-undo" severity="info" size="small" pTooltip="Restaurar"
-              tooltipPosition="bottom" (onClick)="onRestore(item); $event.stopPropagation()" styleClass="w-8"></p-button>
-            }
-            @if(typePage === types.LIST) {
-              <p-button icon="pi pi-pencil" size="small" pTooltip="Editar" tooltipPosition="bottom" styleClass="bg-orange-400 border-orange-400 hover:bg-orange-500 w-8" (onClick)="onUpdate(item); $event.stopPropagation()"></p-button>
-            }
-            <p-button icon="pi pi-trash" size="small" pTooltip="Eliminar" tooltipPosition="bottom" styleClass="bg-red-500 border-red-500 hover:bg-red-600 w-8" (onClick)="onDelete(item); $event.stopPropagation()"></p-button>
-          </div>
-        </td>
-      </tr>
+              @if(typePage === types.RECYCLE) {
+                <p-button icon="pi pi-undo" severity="info" size="small" pTooltip="Restaurar"
+                tooltipPosition="bottom" (onClick)="onRestore(item); $event.stopPropagation()" styleClass="w-8"></p-button>
+              }
+              @if(typePage === types.LIST) {
+                <p-button icon="pi pi-pencil" size="small" pTooltip="Editar" tooltipPosition="bottom" styleClass="bg-orange-400 border-orange-400 hover:bg-orange-500 w-8" (onClick)="onUpdate(item); $event.stopPropagation()"></p-button>
+              }
+              <p-button icon="pi pi-trash" size="small" pTooltip="Eliminar" tooltipPosition="bottom" styleClass="bg-red-500 border-red-500 hover:bg-red-600 w-8" (onClick)="onDelete(item); $event.stopPropagation()"></p-button>
+            </div>
+          </td>
+        </tr>
+      }
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>

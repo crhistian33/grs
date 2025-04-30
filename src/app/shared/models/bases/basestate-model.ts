@@ -9,6 +9,8 @@ export interface BaseStateModel<T extends BaseModel> {
   selectedEntity: T | null;
   trashes: number;
   loading: boolean;
+  loaded: boolean;
+  loadedTrash: boolean;
   result: {
     title?: string,
     message?: string,
@@ -23,5 +25,7 @@ export const INITIAL_VALUES_BASE = {
   selectedEntity: null,
   trashes: 0,
   loading: false,
+  loaded: false,
+  loadedTrash: false,
   result: null
 };

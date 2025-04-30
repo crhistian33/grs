@@ -46,19 +46,14 @@ export class ListComponent implements OnInit, OnDestroy {
   trashes$: Observable<number> = this.store.select(ShiftState.getTrashes);
 
   ngOnInit(): void {
-    this.store.dispatch([
-      new LayoutAction.SetTitle(TITLES.SHIFTS),
-      new ShiftActions.GetAll()
-    ]);
+    this.store.dispatch(new LayoutAction.SetTitle(TITLES.SHIFTS));
+    this.store.dispatch(new ShiftActions.GetAll());
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.store.dispatch([
-      new LayoutAction.ClearTitle(),
-      new ShiftActions.ClearAll()
-    ]);
+    this.store.dispatch(new LayoutAction.ClearTitle());
   }
 
   onCreate() {

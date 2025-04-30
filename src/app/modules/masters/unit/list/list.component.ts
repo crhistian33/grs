@@ -23,6 +23,7 @@ import { ShiftActions } from '@states/shift/shift.actions';
 import { CustomerActions } from '@states/customer/customer.actions';
 import { CenterActions } from '@states/center/center.actions';
 import { APP_FILTERS } from 'src/app/core/definitions/filters';
+import { ActionService } from '@shared/services/ui/action.service';
 
 @Component({
   selector: 'app-list',
@@ -34,6 +35,7 @@ import { APP_FILTERS } from 'src/app/core/definitions/filters';
 export class ListComponent implements OnInit, OnDestroy {
   private modalService = inject(ModalService);
   private toastService = inject(ToastService);
+  private actionService = inject(ActionService);
   private store = inject(Store);
   private destroy$ = new Subject<void>();
 
@@ -50,7 +52,7 @@ export class ListComponent implements OnInit, OnDestroy {
   trashes$: Observable<number> = this.store.select(UnitState.getTrashes);
 
   ngOnInit(): void {
-    this.store.dispatch([
+    this.actionService.execActions([
       new LayoutAction.SetTitle(TITLES.UNITS),
       new UnitActions.GetAll(),
       new CompanyActions.GetOptions(),
@@ -63,10 +65,7 @@ export class ListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.store.dispatch([
-      new LayoutAction.ClearTitle(),
-      new UnitActions.ClearAll()
-    ]);
+    this.store.dispatch(new LayoutAction.ClearTitle());
   }
 
   onCreate() {

@@ -7,6 +7,7 @@ import { WorkerActions } from '@states/worker/worker.actions';
 import { SetLoading } from '@shared/states/loading/loading.actions';
 import { tap } from 'rxjs';
 import { ApiResSingle } from '@shared/models/bases/response.model';
+import { Sort } from '@shared/models/ui/sort.model';
 
 @State<WorkerStateModel>({
   name: 'worker',
@@ -17,6 +18,14 @@ import { ApiResSingle } from '@shared/models/bases/response.model';
 export class WorkerState extends BaseState<Worker, WorkerResquest> {
   constructor(private workerService: WorkerService) {
     super(workerService);
+  }
+
+  protected getSortField(): Sort<Worker> {
+    return {
+      field: 'end_date',
+      type: 'date',
+      direction: true
+    };
   }
 
   // Selectores

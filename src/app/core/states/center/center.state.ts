@@ -4,6 +4,7 @@ import { Center, CenterResquest, CenterStateModel, INITIAL_VALUES } from '@model
 import { BaseState } from '@shared/states/state-base/state-base.state';
 import { CenterService } from '@services/masters/center.service';
 import { CenterActions } from '@states/center/center.actions';
+import { Sort } from '@shared/models/ui/sort.model';
 
 @State<CenterStateModel>({
   name: 'center',
@@ -14,6 +15,14 @@ import { CenterActions } from '@states/center/center.actions';
 export class CenterState extends BaseState<Center, CenterResquest> {
   constructor(private centerService: CenterService) {
     super(centerService);
+  }
+
+  protected getSortField(): Sort<Center> {
+    return {
+      field: 'name',
+      type: 'string',
+      direction: true
+    };
   }
 
   // Selectores
