@@ -54,6 +54,25 @@ export abstract class BaseState<T extends BaseModel, R>  {
     );
   }
 
+  protected getOptionsBase(ctx: StateContext<BaseStateModel<T>>) {
+    ctx.patchState({ loading: true });
+    return this.service.getOptions().pipe(
+      tap({
+        next: (response: ApiResCollection<T>) => {
+          ctx.patchState({
+            options: response.data
+          })
+        },
+        error: () => {
+          ctx.patchState({ loading: false });
+        },
+        finalize: () => {
+          ctx.patchState({ loading: false });
+        }
+      })
+    );
+  }
+
   protected getOneBase(ctx: StateContext<BaseStateModel<T>>, id: number, type: string) {
     ctx.dispatch(new SetLoading(type, true));
     return this.service.getOne(id).pipe(
@@ -105,9 +124,12 @@ export abstract class BaseState<T extends BaseModel, R>  {
           const updatedEntities = state.entities.map(entity =>
             entity.id === Number(id) ? { ...entity, ...response.data } : entity
           );
+          const updatedFilterEntities = state.filterEntities.map(entity =>
+            entity.id === Number(id) ? { ...entity, ...response.data } : entity
+          );
           ctx.patchState({
             entities: updatedEntities,
-            filterEntities: updatedEntities,
+            filterEntities: [...updatedFilterEntities],
             result: { title: response.title, message: response.message },
           });
         },
@@ -125,13 +147,14 @@ export abstract class BaseState<T extends BaseModel, R>  {
     ctx.dispatch(new SetLoading(type, true));
     const state = ctx.getState();
     const entities = state.entities.filter(item => item.id !== id);
+    const filterEntities = state.filterEntities.filter(item => item.id !== id);
 
     return this.service.delete(id).pipe(
       tap({
         next: (response: ApiResSingle<T>) => {
           ctx.patchState({
             entities,
-            filterEntities: entities,
+            filterEntities: [...filterEntities],
             result: { title: response.title, message: response.message },
             trashes: response.trashes,
           })
@@ -296,14 +319,13 @@ export abstract class BaseState<T extends BaseModel, R>  {
     const state = ctx.getState();
     const { search, companyId, customerId, unitId, shiftId, centerId, typeworkerId } = payload;
     const data = page === TYPES.LIST ? state.entities : state.trashEntities;
-
     const filtered = data.filter((item: any) => {
-      const matchDrop = (!companyId || item.company.id === companyId) &&
-                        (!customerId || item.customer.id === customerId) &&
-                        (!unitId || item.unit.id === unitId) &&
-                        (!shiftId || item.shift.id === shiftId) &&
-                        (!centerId || item.center.id === centerId) &&
-                        (!typeworkerId || item.typeworker.id === typeworkerId);
+      const matchDrop = (!companyId || item.company?.id === companyId) &&
+                        (!customerId || item.customer?.id === customerId) &&
+                        (!unitId || item.unit?.id === unitId) &&
+                        (!shiftId || item.shift?.id === shiftId) &&
+                        (!centerId || item.center?.id === centerId) &&
+                        (!typeworkerId || item.typeworker?.id === typeworkerId);
 
       if(!search)
         return matchDrop;
@@ -313,7 +335,6 @@ export abstract class BaseState<T extends BaseModel, R>  {
         const normalizedValue = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const normalizedSearch = search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         return normalizedValue.includes(normalizedSearch);
-        //return value.includes(search.toLowerCase());
       });
 
       return matchDrop && matchSearch;

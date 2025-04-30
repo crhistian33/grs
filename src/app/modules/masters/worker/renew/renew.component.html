@@ -1,9 +1,12 @@
-<div class="flex md:justify-between">
-  <div class="flex items-center divide-x divide-gray-300">
-    <span class="font-semibold md:text-xl text-cyan-800 pe-2">{{ worker.name }}</span>
-    <span class="ps-2">DNI: {{ worker.dni }}</span>
+<div class="flex flex-col md:flex-row gap-y-0.5 md:gap-y-0 md:justify-between">
+  <div class="flex items-center gap-x-1">
+    <span class="font-semibold text-cyan-800">{{ worker.name }}</span>
+    <span>({{ worker.typeworker.name }})</span>
   </div>
-  <span class="font-semibold md:text-xl text-cyan-800">{{ worker.typeworker.name }}</span>
+  <div class="flex items-center gap-x-1">
+    <span class="font-semibold text-cyan-800">Vencido:</span>
+    <span>{{ worker.start_date }} al {{ worker.end_date }}</span>
+  </div>
 </div>
 <hr class="border-gray-300 my-3" />
 <form [formGroup]="myForm" (submit)="onSubmit()">

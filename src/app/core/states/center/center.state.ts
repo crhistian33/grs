@@ -33,6 +33,11 @@ export class CenterState extends BaseState<Center, CenterResquest> {
   }
 
   @Selector()
+  static getOptions(state: CenterStateModel) {
+    return state.options ?? [];
+  }
+
+  @Selector()
   static getTrashes(state: CenterStateModel) {
     return state.trashes;
   }
@@ -87,6 +92,11 @@ export class CenterState extends BaseState<Center, CenterResquest> {
   @Action(CenterActions.GetAllTrash)
   getAllTrash(ctx: StateContext<CenterStateModel>) {
     return super.getAllTrashBase(ctx);
+  }
+
+  @Action(CenterActions.GetOptions)
+  getOptions(ctx: StateContext<CenterStateModel>) {
+    return super.getOptionsBase(ctx);
   }
 
   @Action(CenterActions.GetOne)

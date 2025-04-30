@@ -18,7 +18,7 @@
   @if(field.type === 'date') {
     <div [ngClass]="{'col-span-1': field.cols === 1, 'col-span-1 md:col-span-2' : field.cols === 2 }">
       <p-iftalabel>
-        <p-datepicker [formControlName]="field.key" inputId="date" [appendTo]="'body'" showIcon iconDisplay="input" dateFormat="dd/mm/yy" [ngClass]="{'ng-invalid ng-dirty': isInvalid}" styleClass="w-full" />
+        <p-datepicker dataType="date" [formControlName]="field.key" inputId="date" [appendTo]="'body'" showIcon iconDisplay="input" dateFormat="dd/mm/yy" [ngClass]="{'ng-invalid ng-dirty': isInvalid}" styleClass="w-full" />
         <label for="date">{{ field.label }}</label>
       </p-iftalabel>
     </div>

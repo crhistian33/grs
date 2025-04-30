@@ -10,6 +10,10 @@ export namespace ShiftActions {
     static readonly type = '[Shift] Get All Trashed';
   }
 
+  export class GetOptions {
+    static readonly type = '[Shift] Get Options';
+  }
+
   export class GetOne {
     static readonly type = '[Shift] Get One';
     constructor(public id: number) {}

@@ -38,6 +38,11 @@ export class CompanyState extends BaseState<Company, CompanyResquest> {
   }
 
   @Selector()
+  static getOptions(state: CompanyStateModel) {
+    return state.options ?? [];
+  }
+
+  @Selector()
   static getLoading(state: CompanyStateModel) {
     return state.loading;
   }
@@ -87,6 +92,11 @@ export class CompanyState extends BaseState<Company, CompanyResquest> {
   @Action(CompanyActions.GetAllTrash)
   getAllTrash(ctx: StateContext<CompanyStateModel>) {
     return super.getAllTrashBase(ctx);
+  }
+
+  @Action(CompanyActions.GetOptions)
+  getOptions(ctx: StateContext<CompanyStateModel>) {
+    return super.getOptionsBase(ctx);
   }
 
   @Action(CompanyActions.GetOne)

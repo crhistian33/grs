@@ -42,12 +42,12 @@ export class FilterComponent implements OnInit {
   visible = this.toggleStateService.filterData;
   filterForm!: FormGroup;
 
-  companies$: Observable<Company[]> = this.store.select(CompanyState.getItems);
-  customers$: Observable<Customer[]> = this.store.select(CustomerState.getItems);
-  units$: Observable<Unit[]> = this.store.select(UnitState.getItems);
-  typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getItems);
-  centers$: Observable<Center[]> = this.store.select(CenterState.getItems);
-  shifts$: Observable<Shift[]> = this.store.select(ShiftState.getItems);
+  companies$: Observable<Company[]> = this.store.select(CompanyState.getOptions);
+  customers$: Observable<Customer[]> = this.store.select(CustomerState.getOptions);
+  units$: Observable<Unit[]> = this.store.select(UnitState.getOptions);
+  typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getOptions);
+  centers$: Observable<Center[]> = this.store.select(CenterState.getOptions);
+  shifts$: Observable<Shift[]> = this.store.select(ShiftState.getOptions);
 
   ngOnInit(): void {
     this.createFilterForm();

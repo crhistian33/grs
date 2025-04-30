@@ -10,6 +10,10 @@ export namespace CustomerActions {
     static readonly type = '[Customer] Get All Trashed';
   }
 
+  export class GetOptions {
+    static readonly type = '[Customer] Get Options';
+  }
+
   export class GetOne {
     static readonly type = '[Customer] Get One';
     constructor(public id: number) {}

@@ -33,6 +33,11 @@ export class ShiftState extends BaseState<Shift, ShiftResquest> {
   }
 
   @Selector()
+  static getOptions(state: ShiftStateModel) {
+    return state.options ?? [];
+  }
+
+  @Selector()
   static getTrashes(state: ShiftStateModel) {
     return state.trashes;
   }
@@ -87,6 +92,11 @@ export class ShiftState extends BaseState<Shift, ShiftResquest> {
   @Action(ShiftActions.GetAllTrash)
   getAllTrash(ctx: StateContext<ShiftStateModel>) {
     return super.getAllTrashBase(ctx);
+  }
+
+  @Action(ShiftActions.GetOptions)
+  getOptions(ctx: StateContext<ShiftStateModel>) {
+    return super.getOptionsBase(ctx);
   }
 
   @Action(ShiftActions.GetOne)

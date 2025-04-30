@@ -10,6 +10,10 @@ export namespace CompanyActions {
     static readonly type = '[Company] Get All Trashed';
   }
 
+  export class GetOptions {
+    static readonly type = '[Company] Get Options';
+  }
+
   export class GetOne {
     static readonly type = '[Company] Get One';
     constructor(public id: number) {}

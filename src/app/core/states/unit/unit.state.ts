@@ -33,6 +33,11 @@ export class UnitState extends BaseState<Unit, UnitResquest> {
   }
 
   @Selector()
+  static getOptions(state: UnitStateModel) {
+    return state.options ?? [];
+  }
+
+  @Selector()
   static getTrashes(state: UnitStateModel) {
     return state.trashes;
   }
@@ -87,6 +92,11 @@ export class UnitState extends BaseState<Unit, UnitResquest> {
   @Action(UnitActions.GetAllTrash)
   getAllTrash(ctx: StateContext<UnitStateModel>) {
     return super.getAllTrashBase(ctx);
+  }
+
+  @Action(UnitActions.GetOptions)
+  getOptions(ctx: StateContext<UnitStateModel>) {
+    return super.getOptionsBase(ctx);
   }
 
   @Action(UnitActions.GetOne)

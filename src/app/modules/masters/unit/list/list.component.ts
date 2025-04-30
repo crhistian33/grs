@@ -53,10 +53,10 @@ export class ListComponent implements OnInit, OnDestroy {
     this.store.dispatch([
       new LayoutAction.SetTitle(TITLES.UNITS),
       new UnitActions.GetAll(),
-      new CompanyActions.GetAll(),
-      new CustomerActions.GetAll(),
-      new CenterActions.GetAll(),
-      new ShiftActions.GetAll(),
+      new CompanyActions.GetOptions(),
+      new CustomerActions.GetOptions(),
+      new CenterActions.GetOptions(),
+      new ShiftActions.GetOptions()
     ]);
   }
 
@@ -65,11 +65,7 @@ export class ListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
     this.store.dispatch([
       new LayoutAction.ClearTitle(),
-      new UnitActions.ClearAll(),
-      new CompanyActions.ClearAll(),
-      new CustomerActions.ClearAll(),
-      new CenterActions.ClearAll(),
-      new ShiftActions.ClearAll(),
+      new UnitActions.ClearAll()
     ]);
   }
 

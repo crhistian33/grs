@@ -33,6 +33,11 @@ export class TypeWorkerState extends BaseState<TypeWorker, TypeWorkerResquest> {
   }
 
   @Selector()
+  static getOptions(state: TypeWorkerStateModel) {
+    return state.options ?? [];
+  }
+
+  @Selector()
   static getTrashes(state: TypeWorkerStateModel) {
     return state.trashes;
   }
@@ -87,6 +92,11 @@ export class TypeWorkerState extends BaseState<TypeWorker, TypeWorkerResquest> {
   @Action(TypeWorkerActions.GetAllTrash)
   getAllTrash(ctx: StateContext<TypeWorkerStateModel>) {
     return super.getAllTrashBase(ctx);
+  }
+
+  @Action(TypeWorkerActions.GetOptions)
+  getOptions(ctx: StateContext<TypeWorkerStateModel>) {
+    return super.getOptionsBase(ctx);
   }
 
   @Action(TypeWorkerActions.GetOne)

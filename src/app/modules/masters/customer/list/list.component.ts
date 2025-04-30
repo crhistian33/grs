@@ -51,7 +51,7 @@ export class ListComponent implements OnInit, OnDestroy {
     this.store.dispatch([
       new LayoutAction.SetTitle(TITLES.CUSTOMERS),
       new CustomerActions.GetAll(),
-      new CompanyActions.GetAll()
+      new CompanyActions.GetOptions()
     ]);
   }
 
@@ -61,7 +61,6 @@ export class ListComponent implements OnInit, OnDestroy {
     this.store.dispatch([
       new LayoutAction.ClearTitle(),
       new CustomerActions.ClearAll(),
-      new CompanyActions.ClearAll()
     ]);
   }
 

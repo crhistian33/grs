@@ -7,7 +7,7 @@ export const WORKER_FORM_FIELDS: IFormField[] = [
     label: 'Empresa',
     cols: 1,
     validators: [
-      { name: 'required', value: 'required', message: 'La categoría es requerida' },
+      { name: 'required', value: 'required', message: 'La empresa es requerida' },
     ],
   },
   {

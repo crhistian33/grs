@@ -5,6 +5,7 @@ export interface BaseStateModel<T extends BaseModel> {
   filterEntities: T[];
   trashEntities: T[];
   filterTrashEntities: T[];
+  options?: T[];
   selectedEntity: T | null;
   trashes: number;
   loading: boolean;

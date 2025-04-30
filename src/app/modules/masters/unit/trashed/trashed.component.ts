@@ -50,10 +50,10 @@ export class TrashedComponent implements OnInit {
     this.store.dispatch([
       new LayoutAction.SetTitle(TITLES.UNITS),
       new UnitActions.GetAllTrash(),
-      new CompanyActions.GetAll(),
-      new CustomerActions.GetAll(),
-      new CenterActions.GetAll(),
-      new ShiftActions.GetAll(),
+      new CompanyActions.GetOptions(),
+      new CustomerActions.GetOptions(),
+      new CenterActions.GetOptions(),
+      new ShiftActions.GetOptions(),
     ]);
   }
 
@@ -62,11 +62,7 @@ export class TrashedComponent implements OnInit {
     this.destroy$.complete();
     this.store.dispatch([
       new LayoutAction.ClearTitle(),
-      new UnitActions.ClearAll(),
-      new CompanyActions.ClearAll(),
-      new CustomerActions.ClearAll(),
-      new CenterActions.ClearAll(),
-      new ShiftActions.ClearAll(),
+      new UnitActions.ClearAll()
     ]);
   }
 

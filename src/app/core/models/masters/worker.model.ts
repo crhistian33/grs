@@ -7,19 +7,19 @@ import { Contract } from "./contract.model";
 export interface Worker extends BaseModel {
   name: string;
   dni: string;
-  birth_date: string;
+  birth_date: Date;
   bank_account: string;
   company: Company;
   typeworker: TypeWorker;
-  start_date: string;
-  end_date: string;
+  start_date: Date;
+  end_date: Date;
   state: string;
 }
 
 export interface WorkerResquest {
   name: string;
   dni: string;
-  birth_date: string;
+  birth_date: Date;
   bank_Account: string;
   company_id: number;
   contract: Contract;

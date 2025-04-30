@@ -10,6 +10,10 @@ export namespace CenterActions {
     static readonly type = '[Center] Get All Trashed';
   }
 
+  export class GetOptions {
+    static readonly type = '[Center] Get Options';
+  }
+
   export class GetOne {
     static readonly type = '[Center] Get One';
     constructor(public id: number) {}

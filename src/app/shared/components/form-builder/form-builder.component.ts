@@ -50,11 +50,11 @@ export class FormBuilderComponent implements OnChanges {
   myForm!: FormGroup;
   entityID!: number;
 
-  companies$: Observable<Company[]> = this.store.select(CompanyState.getItems);
-  customers$: Observable<Customer[]> = this.store.select(CustomerState.getItems);
-  centers$: Observable<Center[]> = this.store.select(CenterState.getItems);
-  shifts$: Observable<Shift[]> = this.store.select(ShiftState.getItems);
-  typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getItems);
+  companies$: Observable<Company[]> = this.store.select(CompanyState.getOptions);
+  customers$: Observable<Customer[]> = this.store.select(CustomerState.getOptions);
+  centers$: Observable<Center[]> = this.store.select(CenterState.getOptions);
+  shifts$: Observable<Shift[]> = this.store.select(ShiftState.getOptions);
+  typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getOptions);
 
   ngOnInit() {
     this.createFormGroup();
@@ -139,19 +139,36 @@ export class FormBuilderComponent implements OnChanges {
 
   onSubmit(close: boolean) {
     if (this.myForm.valid) {
+      const formData = {...this.myForm.value };
+      this.formatDatesInFormData(formData);
+
       if(close) {
         this.entityID
-          ? this.formData.emit({ data: this.myForm.value, close, id: this.entityID })
-          : this.formData.emit({ data: this.myForm.value, close });
+          ? this.formData.emit({ data: formData, close, id: this.entityID })
+          : this.formData.emit({ data: formData, close });
       } else {
         this.entityID
-          ? this.formData.emit({ data: this.myForm.value, close, id: this.entityID, onReset: () => this.onResetForm() })
-          : this.formData.emit({ data: this.myForm.value, close, onReset: () => this.onResetForm() });
+          ? this.formData.emit({ data: formData, close, id: this.entityID, onReset: () => this.onResetForm() })
+          : this.formData.emit({ data: formData, close, onReset: () => this.onResetForm() });
       }
     } else {
       this.myForm.markAllAsTouched();
       this.showMessageInvalid();
     }
+  }
+
+  formatDatesInFormData(formData: any) {
+    Object.keys(formData).forEach(key => {
+      const value = formData[key];
+
+      if (key.endsWith('_date') && typeof value === 'string') {
+        formData[key] = value.split("/").reverse().join("-");
+      }
+      else if (typeof value === 'object' && value !== null) {
+        this.formatDatesInFormData(value);
+      }
+    });
+    return formData;
   }
 
   onCancel() {
@@ -249,10 +266,10 @@ export class FormBuilderComponent implements OnChanges {
     if(prevcode) {
       let getState;
       if(key === 'company_id') {
-        getState = CompanyState.getItems;
+        getState = CompanyState.getOptions;
       }
       if(key === 'customer_id') {
-        getState = CustomerState.getItems;
+        getState = CustomerState.getOptions;
       }
       if(getState) {
         const items = this.store.selectSnapshot(getState);

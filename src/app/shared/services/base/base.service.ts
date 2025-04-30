@@ -26,6 +26,10 @@ export abstract class BaseService<T extends BaseModel, R> {
     return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/gettrashed`, { context: checkToken() });
   }
 
+  getOptions(): Observable<ApiResCollection<T>> {
+    return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/getoptions`, { context: checkToken() });
+  }
+
   getOne(id: number): Observable<ApiResSingle<T>> {
     return this.http.get<ApiResSingle<T>>(`${this.apiUrl}/${this.endpoint}/${id}`, { context: checkToken() });
   }

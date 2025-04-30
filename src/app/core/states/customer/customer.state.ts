@@ -33,6 +33,11 @@ export class CustomerState extends BaseState<Customer, CustomerResquest> {
   }
 
   @Selector()
+  static getOptions(state: CustomerStateModel) {
+    return state.options ?? [];
+  }
+
+  @Selector()
   static getTrashes(state: CustomerStateModel) {
     return state.trashes;
   }
@@ -87,6 +92,11 @@ export class CustomerState extends BaseState<Customer, CustomerResquest> {
   @Action(CustomerActions.GetAllTrash)
   getAllTrash(ctx: StateContext<CustomerStateModel>) {
     return super.getAllTrashBase(ctx);
+  }
+
+  @Action(CustomerActions.GetOptions)
+  getOptions(ctx: StateContext<CustomerStateModel>) {
+    return super.getOptionsBase(ctx);
   }
 
   @Action(CustomerActions.GetOne)

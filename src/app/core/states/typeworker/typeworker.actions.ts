@@ -10,6 +10,10 @@ export namespace TypeWorkerActions {
     static readonly type = '[TypeWorker] Get All Trashed';
   }
 
+  export class GetOptions {
+    static readonly type = '[TypeWorker] Get Options';
+  }
+
   export class GetOne {
     static readonly type = '[TypeWorker] Get One';
     constructor(public id: number) {}

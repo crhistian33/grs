@@ -47,7 +47,7 @@ export class TrashedComponent implements OnInit {
     this.store.dispatch([
       new LayoutAction.SetTitle(TITLES.CUSTOMERS),
       new CustomerActions.GetAllTrash(),
-      new CompanyActions.GetAll()
+      new CompanyActions.GetOptions()
     ]);
   }
 
@@ -56,8 +56,7 @@ export class TrashedComponent implements OnInit {
     this.destroy$.complete();
     this.store.dispatch([
       new LayoutAction.ClearTitle(),
-      new CustomerActions.ClearAll(),
-      new CompanyActions.ClearAll()
+      new CustomerActions.ClearAll()
     ]);
   }
 

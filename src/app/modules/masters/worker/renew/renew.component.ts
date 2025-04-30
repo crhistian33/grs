@@ -32,7 +32,7 @@ export class RenewComponent implements OnInit {
   worker!: Worker;
   myForm!: FormGroup;
 
-  typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getItems);
+  typeworkers$: Observable<TypeWorker[]> = this.store.select(TypeWorkerState.getOptions);
 
   ngOnInit(): void {
     this.worker = this.config.data.item;
