@@ -12,7 +12,6 @@ import { FilterDefinition } from '@shared/models/bases/filters.model';
 import { FilterStateModel } from '@shared/models/ui/filter.model';
 import { ToggleStateService } from '@shared/services/ui/togglestate.service';
 import { IDS } from '@shared/utils/constants';
-import { CategoryState } from '@states/category/category.state';
 import { CenterState } from '@states/center/center.state';
 import { CompanyState } from '@states/company/company.state';
 import { CustomerState } from '@states/customer/customer.state';
