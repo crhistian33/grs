@@ -30,6 +30,11 @@ export const routes: Routes = [
         canActivate: [hasRoleGuard([Roles.ADMIN, Roles.SUPERVISOR])],
         loadChildren: () => import('./masters/masters.routes').then(m => m.routes),
         data: { breadcrumb: 'Maestros' }
+      },
+      {
+        path: 'tareo',
+        loadChildren: () => import('./managements/managements.routes').then(m => m.routes),
+        data: { breadcrumb: 'Tareo' }
       }
     ]
   }
