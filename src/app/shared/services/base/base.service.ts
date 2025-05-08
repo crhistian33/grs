@@ -7,27 +7,47 @@ import { Observable, of } from 'rxjs';
 import { environment } from '@env/environment';
 import { Store } from '@ngxs/store';
 import { LayoutAction } from '@shared/states/layout/layout.actions';
+import { AuthState } from '@states/auth/auth.state';
+import { Roles } from '@models/masters/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class BaseService<T extends BaseModel, R> {
+  protected http = inject(HttpClient);
+  protected store = inject(Store);
+
   protected abstract endpoint: string;
   protected apiUrl = `${environment.API_URL}`;
+  protected ENDPOINTS_ALL = ['centers', 'type_workers', 'shifts'];
   //protected mockMode = true;
 
-  protected http = inject(HttpClient);
+  protected getUserRole() {
+    return this.store.selectSnapshot(AuthState.getUserProfile)?.role.name;
+  }
 
   getAll(): Observable<ApiResCollection<T>> {
-    return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}`, { context: checkToken() });
+    const role = this.getUserRole();
+    if (role === Roles.ADMIN || this.ENDPOINTS_ALL.includes(this.endpoint))
+      return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}`, { context: checkToken() });
+    else
+      return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/getbycompany`, { context: checkToken() });
   }
 
   getAllTrash(): Observable<ApiResCollection<T>> {
-    return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/gettrashed`, { context: checkToken() });
+    const role = this.getUserRole();
+    if (role === Roles.ADMIN || this.ENDPOINTS_ALL.includes(this.endpoint))
+      return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/gettrashed`, { context: checkToken() });
+    else
+    return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/gettrashedbycompany`, { context: checkToken() });
   }
 
   getOptions(): Observable<ApiResCollection<T>> {
-    return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/getoptions`, { context: checkToken() });
+    const role = this.getUserRole();
+    if (role === Roles.ADMIN || this.ENDPOINTS_ALL.includes(this.endpoint))
+      return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/getoptions`, { context: checkToken() });
+    else
+      return this.http.get<ApiResCollection<T>>(`${this.apiUrl}/${this.endpoint}/getoptionsbycompany`, { context: checkToken() });
   }
 
   getOne(id: number): Observable<ApiResSingle<T>> {

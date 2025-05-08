@@ -24,6 +24,8 @@ import { CustomerActions } from '@states/customer/customer.actions';
 import { CenterActions } from '@states/center/center.actions';
 import { APP_FILTERS } from 'src/app/core/definitions/filters';
 import { ActionService } from '@shared/services/ui/action.service';
+import { AuthState } from '@states/auth/auth.state';
+import { Roles } from '@models/masters/user.model';
 
 @Component({
   selector: 'app-list',
@@ -43,6 +45,7 @@ export class ListComponent implements OnInit, OnDestroy {
   title: string = TITLES.LIST;
   typePage: string = TYPES.LIST;
   filters = APP_FILTERS.filter(filter => filter.modules.includes(IDS.UNIT));
+  Roles = Roles;
 
   units$: Observable<Unit[]> = this.store.select(UnitState.getItems);
   areAllSelected$: Observable<boolean> = this.store.select(UnitState.areAllSelected);
@@ -52,14 +55,19 @@ export class ListComponent implements OnInit, OnDestroy {
   trashes$: Observable<number> = this.store.select(UnitState.getTrashes);
 
   ngOnInit(): void {
-    this.actionService.execActions([
+    const rol = this.store.selectSnapshot(AuthState.getUserProfile)?.role.name;
+    let actions = [
       new LayoutAction.SetTitle(TITLES.UNITS),
       new UnitActions.GetAll(),
-      new CompanyActions.GetOptions(),
       new CustomerActions.GetOptions(),
       new CenterActions.GetOptions(),
       new ShiftActions.GetOptions()
-    ]);
+    ];
+
+    if(rol === Roles.ADMIN)
+      actions.push(new CompanyActions.GetOptions())
+
+    this.actionService.execActions(actions);
   }
 
   ngOnDestroy(): void {

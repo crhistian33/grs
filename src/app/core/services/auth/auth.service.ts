@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { checkToken } from '@interceptors/auth.interceptor';
-import { AuthResponse } from '@shared/models/bases/response.model';
+import { ApiResSingle, AuthResponse } from '@shared/models/bases/response.model';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
+import { User } from '@models/masters/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,9 @@ export class AuthService {
 
   logout() {
     return this.http.get(`${this.apiUrl}/logout`, { context: checkToken() });
+  }
+
+  profile(): Observable<ApiResSingle<User>> {
+    return this.http.get<ApiResSingle<User>>(`${this.apiUrl}/profile`, { context: checkToken() });
   }
 }

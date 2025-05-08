@@ -21,6 +21,8 @@ import { LayoutAction } from '@shared/states/layout/layout.actions';
 import { CompanyActions } from '@states/company/company.actions';
 import { APP_FILTERS } from 'src/app/core/definitions/filters';
 import { ActionService } from '@shared/services/ui/action.service';
+import { Roles, UserRole } from '@models/masters/user.model';
+import { AuthState } from '@states/auth/auth.state';
 
 @Component({
   selector: 'app-list',
@@ -36,9 +38,10 @@ export class ListComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private destroy$ = new Subject<void>();
 
-  headers: ITableHeader<Customer>[] = CUSTOMER_TABLE_HEADERS;
+  headers: ITableHeader<Customer>[] = [];
   title: string = TITLES.LIST;
   typePage: string = TYPES.LIST;
+  Roles = Roles;
 
   filters = APP_FILTERS.filter(filter => filter.modules.includes(IDS.CUSTOMER));
 
@@ -50,11 +53,23 @@ export class ListComponent implements OnInit, OnDestroy {
   trashes$: Observable<number> = this.store.select(CustomerState.getTrashes);
 
   ngOnInit(): void {
-    this.actionService.execActions([
+    const rol = this.store.selectSnapshot(AuthState.getUserProfile)?.role.name;
+    let actions = [
       new LayoutAction.SetTitle(TITLES.CUSTOMERS),
       new CustomerActions.GetAll(),
-      new CompanyActions.GetOptions()
-    ]);
+    ];
+
+    if(rol === Roles.ADMIN)
+      actions.push(new CompanyActions.GetOptions());
+
+    this.actionService.execActions(actions);
+
+    this.headers = CUSTOMER_TABLE_HEADERS.filter(header => {
+      if (header.roles) {
+        return header.roles.includes(rol as UserRole);
+      }
+      return true;
+    });
   }
 
   ngOnDestroy(): void {

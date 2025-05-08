@@ -20,6 +20,8 @@ import { FilterComponent } from '@shared/components/filter/filter.component';
 import { FilterStateModel } from '@shared/models/ui/filter.model';
 import { CompanyActions } from '@states/company/company.actions';
 import { ActionService } from '@shared/services/ui/action.service';
+import { AuthState } from '@states/auth/auth.state';
+import { Roles, UserRole } from '@models/masters/user.model';
 
 @Component({
   selector: 'app-trashed',
@@ -36,8 +38,9 @@ export class TrashedComponent implements OnInit {
 
   title: string = TITLES.RECYCLE;
   typePage: string = TYPES.RECYCLE;
-  headers: ITableHeader<Customer>[] = CUSTOMER_TABLE_HEADERS;
+  headers: ITableHeader<Customer>[] = [];
   filters = APP_FILTERS.filter(filter => filter.modules.includes(IDS.CUSTOMER));
+  Roles = Roles;
 
   customers$: Observable<Customer[]> = this.store.select(CustomerState.getItemsTrashed);
   areAllSelected$: Observable<boolean> = this.store.select(CustomerState.areTrashedAllSelected);
@@ -46,11 +49,23 @@ export class TrashedComponent implements OnInit {
   loading$: Observable<boolean> = this.store.select(CustomerState.getLoading);
 
   ngOnInit(): void {
-    this.actionService.execActions([
+    const rol = this.store.selectSnapshot(AuthState.getUserProfile)?.role.name;
+    let actions = [
       new LayoutAction.SetTitle(TITLES.CUSTOMERS),
       new CustomerActions.GetAllTrash(),
-      new CompanyActions.GetOptions()
-    ]);
+    ];
+
+    if(rol === Roles.ADMIN)
+      actions.push(new CompanyActions.GetOptions());
+
+    this.actionService.execActions(actions);
+
+    this.headers = CUSTOMER_TABLE_HEADERS.filter(header => {
+      if (header.roles) {
+        return header.roles.includes(rol as UserRole);
+      }
+      return true;
+    });
   }
 
   ngOnDestroy(): void {

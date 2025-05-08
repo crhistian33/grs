@@ -23,6 +23,8 @@ import { TypeWorkerActions } from '@states/typeworker/typeworker.actions';
 import { APP_FILTERS } from 'src/app/core/definitions/filters';
 import { RenewComponent } from '../renew/renew.component';
 import { ActionService } from '@shared/services/ui/action.service';
+import { AuthState } from '@states/auth/auth.state';
+import { Roles, UserRole } from '@models/masters/user.model';
 
 @Component({
   selector: 'app-list',
@@ -38,10 +40,11 @@ export class ListComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private destroy$ = new Subject<void>();
 
-  headers: ITableHeader<Worker>[] = WORKER_TABLE_HEADERS;
+  headers: ITableHeader<Worker>[] = [];
   title: string = TITLES.LIST;
   typePage: string = TYPES.LIST;
   filters = APP_FILTERS.filter(filter => filter.modules.includes(IDS.WORKER));
+  Roles = Roles;
 
   workers$: Observable<Worker[]> = this.store.select(WorkerState.getItems);
   areAllSelected$: Observable<boolean> = this.store.select(WorkerState.areAllSelected);
@@ -51,12 +54,24 @@ export class ListComponent implements OnInit, OnDestroy {
   trashes$: Observable<number> = this.store.select(WorkerState.getTrashes);
 
   ngOnInit(): void {
-    this.actionService.execActions([
+    const rol = this.store.selectSnapshot(AuthState.getUserProfile)?.role.name;
+    let actions = [
       new LayoutAction.SetTitle(TITLES.WORKERS),
       new WorkerActions.GetAll(),
-      new CompanyActions.GetOptions(),
       new TypeWorkerActions.GetOptions()
-    ]);
+    ];
+
+    if(rol === Roles.ADMIN)
+      actions.push(new CompanyActions.GetOptions());
+
+    this.actionService.execActions(actions);
+
+    this.headers = WORKER_TABLE_HEADERS.filter(header => {
+      if (header.roles) {
+        return header.roles.includes(rol as UserRole);
+      }
+      return true;
+    });
   }
 
   ngOnDestroy(): void {
@@ -70,7 +85,6 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   onUpdate(item: any) {
-    console.log(item);
     this.modalService.onModalForm(FormComponent, TITLES.UPDATE, item);
   }
 

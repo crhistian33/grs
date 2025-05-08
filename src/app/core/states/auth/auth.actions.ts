@@ -16,6 +16,10 @@ export namespace AuthActions {
     static readonly type = '[Auth] Get User ID';
   }
 
+  export class Profile {
+    static readonly type = '[Auth] Get Profile';
+  }
+
   export class ClearAll {
     static readonly type = '[Auth] Clear All';
   }

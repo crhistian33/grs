@@ -1,13 +1,15 @@
 import { Location } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { Roles } from '@models/masters/user.model';
+import { HasRoleDirective } from '@shared/directives/has-role.directive';
 import { ToggleStateService } from '@shared/services/ui/togglestate.service';
 import { TYPES } from '@shared/utils/constants';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-header-content',
-  imports: [ButtonModule, RouterLink],
+  imports: [ButtonModule, RouterLink, HasRoleDirective],
   templateUrl: './header-content.component.html',
   styleUrl: './header-content.component.scss',
 })
@@ -26,6 +28,7 @@ export class HeaderContentComponent {
   @Input() trashes: number = 0;
 
   types = TYPES;
+  Roles = Roles;
   fallbackUrl = '/';
 
   onOpenCreate() {

@@ -67,7 +67,7 @@ export const appConfig: ApplicationConfig = {
         WorkerState,
       ],
       withNgxsStoragePlugin({
-        keys: ['auth'],
+        keys: ['auth.access_token', 'auth.refresh_token', 'auth.isAuthenticated', 'auth.user'],
         storage: 0
       }),
       //withNgxsReduxDevtoolsPlugin(),

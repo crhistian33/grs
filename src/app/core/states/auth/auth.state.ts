@@ -33,6 +33,11 @@ export class AuthState {
     return state.isAuthenticated;
   }
 
+  @Selector()
+  static getUserProfile(state: AuthStateModel) {
+    return state.user;
+  }
+
   @Action(AuthActions.Login)
   login(ctx: StateContext<AuthStateModel>, payload: AuthActions.Login) {
     ctx.dispatch(new SetLoading(AuthActions.Login.type, true));
@@ -47,6 +52,7 @@ export class AuthState {
               refresh_token: response.data.refresh_token,
               isAuthenticated: true,
             });
+            ctx.dispatch(new AuthActions.Profile());
             this.router.navigateByUrl('/');
           },
           error: () => {
@@ -85,12 +91,33 @@ export class AuthState {
     return this.service.logout().pipe(
       tap({
         next: () => {
+          this.router.navigateByUrl('/auth/login');
           this.clear(ctx);
           ctx.dispatch(new SetLoading(AuthActions.Logout.type, false));
-          this.router.navigateByUrl('/auth/login');
         },
         error: () => {
           ctx.dispatch(new SetLoading(AuthActions.Logout.type, false));
+        }
+      })
+    );
+  }
+
+  @Action(AuthActions.Profile)
+  profile(ctx: StateContext<AuthStateModel>) {
+    const type = AuthActions.Profile.type;
+    ctx.dispatch(new SetLoading(type, true));
+    return this.service.profile().pipe(
+      tap({
+        next: (response) => {
+          ctx.patchState({
+            user: response.data
+          });
+        },
+        error: () => {
+          ctx.dispatch(new SetLoading(type, false));
+        },
+        finalize: () => {
+          ctx.dispatch(new SetLoading(type, false));
         }
       })
     );

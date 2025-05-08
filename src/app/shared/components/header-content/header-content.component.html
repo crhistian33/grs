@@ -28,6 +28,7 @@
       size="small"
       [disabled]="!hasSelectedItem"
       (onClick)="onDeleteAll()"
+      *hasRole="[Roles.ADMIN]"
     />
     @if(typePage === types.RECYCLE) {
       <p-button
@@ -37,9 +38,10 @@
         size="small"
         [disabled]="!hasSelectedItem"
         (onClick)="onRestoreAll()"
+        *hasRole="[Roles.ADMIN]"
       />
     }
-    @if(typePage === types.RECYCLE || typePage === types.CEASED) {
+    @if(typePage === types.RECYCLE) {
       <p-button
         icon="pi pi-arrow-right"
         iconPos="right"
@@ -56,6 +58,7 @@
         size="small"
         styleClass="border-cyan-700 bg-cyan-700 hover:bg-cyan-800"
         (onClick)="onOpenCreate()"
+        *hasRole="[Roles.ADMIN]"
       />
     }
   </div>

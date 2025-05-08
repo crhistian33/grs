@@ -10,6 +10,7 @@ import { TYPES } from '@shared/utils/constants';
 import { FilterStateModel } from '@shared/models/ui/filter.model';
 import { SortService } from '@shared/services/ui/sort.service';
 import { Sort } from '@shared/models/ui/sort.model';
+import { Shift } from '@models/masters/shift.model';
 
 @Injectable()
 export abstract class BaseState<T extends BaseModel, R>  {
@@ -415,7 +416,7 @@ export abstract class BaseState<T extends BaseModel, R>  {
       const matchDrop = (!companyId || item.company?.id === companyId) &&
                         (!customerId || item.customer?.id === customerId) &&
                         (!unitId || item.unit?.id === unitId) &&
-                        (!shiftId || item.shift?.id === shiftId) &&
+                        (!shiftId || item.shifts.find((shift: Shift) => shift.id === shiftId)) &&
                         (!centerId || item.center?.id === centerId) &&
                         (!typeworkerId || item.typeworker?.id === typeworkerId);
 

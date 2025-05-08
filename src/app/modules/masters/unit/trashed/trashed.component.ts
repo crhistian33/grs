@@ -23,6 +23,8 @@ import { CustomerActions } from '@states/customer/customer.actions';
 import { CenterActions } from '@states/center/center.actions';
 import { ShiftActions } from '@states/shift/shift.actions';
 import { ActionService } from '@shared/services/ui/action.service';
+import { AuthState } from '@states/auth/auth.state';
+import { Roles } from '@models/masters/user.model';
 
 @Component({
   selector: 'app-trashed',
@@ -41,6 +43,7 @@ export class TrashedComponent implements OnInit {
   typePage: string = TYPES.RECYCLE;
   headers: ITableHeader<Unit>[] = UNIT_TABLE_HEADERS;
   filters = APP_FILTERS.filter(filter => filter.modules.includes(IDS.UNIT));
+  Roles = Roles;
 
   units$: Observable<Unit[]> = this.store.select(UnitState.getItemsTrashed);
   areAllSelected$: Observable<boolean> = this.store.select(UnitState.areTrashedAllSelected);
@@ -49,14 +52,19 @@ export class TrashedComponent implements OnInit {
   loading$: Observable<boolean> = this.store.select(UnitState.getLoading);
 
   ngOnInit(): void {
-    this.actionService.execActions([
+    const rol = this.store.selectSnapshot(AuthState.getUserProfile)?.role.name;
+    let actions = [
       new LayoutAction.SetTitle(TITLES.UNITS),
       new UnitActions.GetAllTrash(),
-      new CompanyActions.GetOptions(),
       new CustomerActions.GetOptions(),
       new CenterActions.GetOptions(),
-      new ShiftActions.GetOptions(),
-    ]);
+      new ShiftActions.GetOptions()
+    ];
+
+    if(rol === Roles.ADMIN)
+      actions.push(new CompanyActions.GetOptions());
+
+    this.actionService.execActions(actions);
   }
 
   ngOnDestroy(): void {

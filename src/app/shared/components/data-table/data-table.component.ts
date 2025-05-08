@@ -8,10 +8,12 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { FormatDataPipe } from '@shared/pipes/format-data.pipe';
 import { TYPES } from '@shared/utils/constants';
 import { IconFieldModule } from 'primeng/iconfield';
+import { HasRoleDirective } from '@shared/directives/has-role.directive';
+import { Roles } from '@models/masters/user.model';
 
 @Component({
   selector: 'app-data-table',
-  imports: [CommonModule, TableModule, ButtonModule, CheckboxModule, Tooltip, SkeletonModule, FormatDataPipe, IconFieldModule],
+  imports: [CommonModule, TableModule, ButtonModule, CheckboxModule, Tooltip, SkeletonModule, FormatDataPipe, IconFieldModule, HasRoleDirective],
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -31,6 +33,7 @@ export class DataTableComponent {
   @Input() loading: boolean = false;
 
   types = TYPES;
+  Roles = Roles;
 
   onUpdate(item: any) {
     this.update.emit(item);
